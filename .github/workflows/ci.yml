@@ -33,7 +33,7 @@ jobs:
           php_version: 7.4
           php_extensions: xdebug mbstring mysqli pdo_mysql
       - name: find5
-        run: find / -type f -name "*.ini" | xargs grep "pdo_mysql.default_socket"
+        run: sudo find / -type f -name "*.ini" | xargs grep "pdo_mysql.default_socket"
       - name: find6
-        run: find / -type f -name "*.cnf" | xargs grep "pdo_mysql.default_socket"
+        run: sudo find / -type f -name "*.cnf" | xargs grep "pdo_mysql.default_socket"
 
