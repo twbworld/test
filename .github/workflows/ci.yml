@@ -16,6 +16,8 @@ jobs:
       - name: create-db
         run: sudo mysqladmin -uroot -proot create trojan
       - run: |
+          echo '================================1111'
+          cat /etc/mysql/my.cnf.fallback
           echo '================================222222'
-          cat /var/lib/dpkg/alternatives/my.cnf
-          sudo docker ps
+          cat /etc/mysql/mysql.cnf
+          echo '================================33333'
