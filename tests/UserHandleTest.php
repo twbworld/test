@@ -29,6 +29,7 @@ class UserHandleTest extends TestCase
         // $logs = $mock->handle();
 
         // $this->assertStringStartsWith(key($data), $logs[0]);
+        // ini_get('display_errors')
         $s = $data;
         $this->assertStringStartsWith('a', 'aa');
     }
