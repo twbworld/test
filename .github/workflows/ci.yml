@@ -13,47 +13,43 @@ jobs:
     runs-on: ubuntu-20.04 #虚拟环境(github提供)
     steps:
       - uses: actions/checkout@v2
-      # - uses: php-actions/composer@v5
+      - uses: php-actions/composer@v5
       - name: restart-mysql #该ubuntu-20.04自带mysql8.0
         run: sudo systemctl restart mysql
       - name: create-db
         run: sudo mysqladmin -uroot -proot create trojan
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
-      - name: finda
-        run: sudo php -m
-      # - name: finde
-      #   run: sudo ls /etc/hhvm/
-      # - name: find1
-      #   run: |
-      #     sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
-      #     sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
-      #     sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/fpm/php.ini
-      #     sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
-      #     sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
-      #     sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
-      #     sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/cgi/php.ini
-      #     sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
-      #     sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/phpdbg/php.ini
-      #     sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/phpdbg/php.ini
-      #     sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/phpdbg/php.ini
-      #     sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/phpdbg/php.ini
-      #     sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cli/php.ini
-      #     sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cli/php.ini
-      #     sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/cli/php.ini
-      #     sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cli/php.ini
-      #     sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
-      #     sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
-      #     sudo sed '$a[Pdo_mysql]' -i /etc/hhvm/php.ini
-      #     sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
-      # - name: find3
-      #   run: sudo ls /var/run/mysqld/
-      # - name: find4
-      #   run: sudo systemctl restart php7.4-fpm
-      # - uses: php-actions/phpunit@v2
-      #   with:
-      #     configuration: ./phpunit.xml
-      #     version: 9.5.2
-      #     php_version: 7.4
-      #     php_extensions: xdebug mbstring mysqli pdo_mysql
+      - name: find1
+        run: |
+          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
+          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
+          sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/fpm/php.ini
+          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
+          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
+          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
+          sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/cgi/php.ini
+          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
+          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/phpdbg/php.ini
+          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/phpdbg/php.ini
+          sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/phpdbg/php.ini
+          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/phpdbg/php.ini
+          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cli/php.ini
+          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cli/php.ini
+          sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/cli/php.ini
+          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cli/php.ini
+          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
+          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
+          sudo sed '$a[Pdo_mysql]' -i /etc/hhvm/php.ini
+          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
+      - name: find3
+        run: sudo ls /var/run/mysqld/
+      - name: find4
+        run: sudo systemctl restart php7.4-fpm
+      - uses: php-actions/phpunit@v2
+        with:
+          configuration: ./phpunit.xml
+          version: 9.5.2
+          php_version: 7.4
+          php_extensions: xdebug mbstring mysqli pdo_mysql
 
