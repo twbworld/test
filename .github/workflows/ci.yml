@@ -46,6 +46,12 @@ jobs:
         run: sudo ls /var/run/mysqld/
       - name: find4
         run: sudo systemctl restart php7.4-fpm
+      - uses: php-actions/phpunit@v2
+        with:
+          configuration: ./phpunit.xml
+          version: 9.5.2
+          php_version: 7.4
+          php_extensions: xdebug mbstring mysqli pdo_mysql
       - name: find5
         run: sudo ls /usr/
       - name: find7
@@ -54,10 +60,4 @@ jobs:
         run: sudo ls /usr/local/etc/
       - name: find6
         run: sudo cat /usr/local/etc/php/php.ini
-      - uses: php-actions/phpunit@v2
-        with:
-          configuration: ./phpunit.xml
-          version: 9.5.2
-          php_version: 7.4
-          php_extensions: xdebug mbstring mysqli pdo_mysql
 
