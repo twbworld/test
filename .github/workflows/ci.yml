@@ -23,7 +23,7 @@ jobs:
       - name: find4
         run: sudo systemctl restart php7.4-fpm
       - name: find9
-        run: sudo sed -i '1s/\/var\/run\/mysqld\/mysqld.sock/\/tmp\/mysqld.sock/g' /etc/mysql/debian.cnf
+        run: sudo sed -i 's/\/var\/run\/mysqld\/mysqld.sock/\/tmp\/mysqld.sock/g' /etc/mysql/debian.cnf
       - name: find7
         run: sudo cat /etc/mysql/debian.cnf
       - name: find10
