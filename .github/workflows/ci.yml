@@ -20,14 +20,16 @@ jobs:
         run: sudo mysqladmin -uroot -proot create trojan
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
-      - name: find
-        run: sudo php -v
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
           version: 9.5.2
           php_version: 7.4
           php_extensions: xdebug mbstring mysqli pdo_mysql
-      - name: find2
-        run: sudo php -v
+      - name: find1
+        run: sudo cat /etc/php/7.4/cli/php.ini
+      - name: find1
+        run: sudo cat /etc/php/7.4/cgi/php.ini
+      - name: find1
+        run: sudo cat /etc/php/7.4/fpm/php.ini
 
