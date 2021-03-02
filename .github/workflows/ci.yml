@@ -21,7 +21,15 @@ jobs:
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
       - name: finda
-        run: sudo mysql -uroot -proot -e "STATUS;"
+        run: sudo systemctl status php7.4-fpm
+      - name: findb
+        run: sudo ls /etc/php/7.4/fpm/
+      - name: findc
+        run: sudo ls /etc/php/7.4/cgi/
+      - name: findd
+        run: sudo ls /etc/php/7.4/phpdbg/
+      - name: finde
+        run: sudo ls /etc/php/7.4/hhvm/
       # - name: find1
       #   run: |
       #     sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
