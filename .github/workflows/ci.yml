@@ -21,7 +21,7 @@ jobs:
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
       - name: finda
-        run: sudo cat /etc/php/7.4/fpm/pool.d/www.conf
+        run: sudo php -m
       # - name: finde
       #   run: sudo ls /etc/hhvm/
       # - name: find1
