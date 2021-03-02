@@ -42,8 +42,10 @@ jobs:
           sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
           sudo sed '$a[Pdo_mysql]' -i /etc/hhvm/php.ini
           sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
+      - name: find3
+        run: sudo ls /var/run/mysqld/
       - name: find4
-        run: sudo systemctl reload php7.4-fpm
+        run: sudo systemctl restart php7.4-fpm
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
