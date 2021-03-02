@@ -17,5 +17,5 @@ jobs:
         run: sudo mysqladmin -uroot -proot create trojan
       - run: |
           echo '================================1111'
-          cat /etc/mysql/debian.cnf
+          sudo cat /etc/mysql/debian.cnf
           echo '================================222222'
