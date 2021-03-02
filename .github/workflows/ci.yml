@@ -55,5 +55,5 @@ jobs:
           php_version: 7.4
           php_extensions: xdebug mbstring mysqli pdo_mysql
       - name: find5
-        run: php7 --ini
+        run: php74 --ini
 
