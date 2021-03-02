@@ -17,4 +17,4 @@ jobs:
         run: sudo mysqladmin -uroot -proot create trojan
       - run: |
           echo '================================222222'
-          cat /etc/my.cnf
+          sudo find / -type f -name "my.cnf"
