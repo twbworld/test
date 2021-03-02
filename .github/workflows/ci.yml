@@ -47,7 +47,11 @@ jobs:
       - name: find4
         run: sudo systemctl restart php7.4-fpm
       - name: find5
-        run: sudo ls /usr/local/etc/php
+        run: sudo ls /usr/
+      - name: find7
+        run: sudo ls /usr/local/
+      - name: find8
+        run: sudo ls /usr/local/etc/
       - name: find6
         run: sudo cat /usr/local/etc/php/php.ini
       - uses: php-actions/phpunit@v2
