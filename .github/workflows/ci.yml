@@ -21,7 +21,7 @@ jobs:
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
       - name: find
-        run: sudo find / -type f -name "php.ini"
+        run: sudo php -v
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
@@ -29,5 +29,5 @@ jobs:
           php_version: 7.4
           php_extensions: xdebug mbstring mysqli pdo_mysql
       - name: find2
-        run: sudo find / -type f -name "php.ini"
+        run: sudo php -v
 
