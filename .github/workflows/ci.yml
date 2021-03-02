@@ -46,6 +46,10 @@ jobs:
         run: sudo ls /var/run/mysqld/
       - name: find4
         run: sudo systemctl restart php7.4-fpm
+      - name: find5
+        run: sudo ls /usr/local/etc/php
+      - name: find6
+        run: sudo cat /usr/local/etc/php/php.ini
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
