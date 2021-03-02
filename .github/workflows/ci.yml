@@ -32,4 +32,6 @@ jobs:
         run: sudo cat /etc/php/7.4/fpm/php.ini
       - name: find6
         run: sudo cat /etc/php/7.4/cgi/php.ini
+      - name: find7
+        run: find /etc/php/7.4/ -type f -name "*.ini" | xargs grep "pdo_mysql.default_socket"
 
