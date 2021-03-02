@@ -29,7 +29,10 @@ class UserHandleTest extends TestCase
         // $logs = $mock->handle();
 
         // $this->assertStringStartsWith(key($data), $logs[0]);
-        // ini_get('display_errors')
+
+
+        var_dump(ini_get('pdo_mysql.default_socket'));exit();
+
         $s = $data;
         $this->assertStringStartsWith('a', 'aa');
     }
