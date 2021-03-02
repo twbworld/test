@@ -55,11 +55,5 @@ jobs:
           php_version: 7.4
           php_extensions: xdebug mbstring mysqli pdo_mysql
       - name: find5
-        run: sudo ls /usr/
-      - name: find7
-        run: sudo ls /usr/local/
-      - name: find8
-        run: sudo ls /usr/local/etc/
-      - name: find6
-        run: sudo cat /usr/local/etc/php/php.ini
+        run: php --ini
 
