@@ -28,11 +28,6 @@ class UserHandleTest extends TestCase
         // $mock->expects($this->once())->method('getUsersByJson')->willReturn(reset($data));
         // $logs = $mock->handle();
 
-
-        var_dump(ini_get('mysql.default_socket'));
-        var_dump(ini_get('mysqli.default_socket'));
-        var_dump(ini_get('pdo_mysql.default_socket'));exit();
-
         // $this->assertStringStartsWith(key($data), $logs[0]);
         $s = $data;
         $this->assertStringStartsWith('a', 'aa');

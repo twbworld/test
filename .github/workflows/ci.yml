@@ -20,32 +20,6 @@ jobs:
         run: sudo mysqladmin -uroot -proot create trojan
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
-      - name: find1
-        run: |
-          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
-          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
-          sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/fpm/php.ini
-          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
-          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
-          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
-          sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/cgi/php.ini
-          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
-          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/phpdbg/php.ini
-          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/phpdbg/php.ini
-          sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/phpdbg/php.ini
-          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/phpdbg/php.ini
-          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cli/php.ini
-          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cli/php.ini
-          sudo sed '$a[Pdo_mysql]' -i /etc/php/7.4/cli/php.ini
-          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cli/php.ini
-          sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
-          sudo sed '2 imysqli.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
-          sudo sed '$a[Pdo_mysql]' -i /etc/hhvm/php.ini
-          sudo sed '$apdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/hhvm/php.ini
-          sudo mkdir /usr/local/etc/php/
-          sudo cp ./php.ini /usr/local/etc/php/
-      - name: find3
-        run: sudo cat /usr/local/etc/php/php.ini
       - name: find4
         run: sudo systemctl restart php7.4-fpm
       - uses: php-actions/phpunit@v2
@@ -55,5 +29,7 @@ jobs:
           php_version: 7.4
           php_extensions: xdebug mbstring mysqli pdo_mysql
       - name: find5
-        run: php74 --ini
+        run: find / -type f -name "*.ini" | xargs grep "pdo_mysql.default_socket"
+      - name: find6
+        run: find / -type f -name "*.cnf" | xargs grep "pdo_mysql.default_socket"
 
