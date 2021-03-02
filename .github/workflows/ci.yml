@@ -29,9 +29,9 @@ jobs:
           php_version: 7.4
           php_extensions: xdebug mbstring mysqli pdo_mysql
       - name: find5
-        run: sudo cat /etc/php/7.4/fpm/php.ini
+        run: sudo cat /etc/php/7.4/fpm/php.ini | grep "pdo_mysql.default_socket"
       - name: find6
-        run: sudo cat /etc/php/7.4/cgi/php.ini
+        run: sudo cat /etc/php/7.4/cgi/php.ini | grep "pdo_mysql.default_socket"
       - name: find7
         run: find /etc/php/7.4/ -type f -name "*.ini" | xargs grep "pdo_mysql.default_socket"
 
