@@ -20,21 +20,15 @@ jobs:
         run: sudo mysqladmin -uroot -proot create trojan
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
-      - name: find4
+      - name: find5
         run: sudo systemctl restart php7.4-fpm
-      - name: find9
-        run: sudo sed -i 's/\/var\/run\/mysqld\/mysqld.sock/\/tmp\/mysqld.sock/g' /etc/mysql/debian.cnf
-      - name: find7
-        run: sudo cat /etc/mysql/debian.cnf
-      - name: find10
-        run: sudo systemctl restart mysql
-      - name: find8
-        run: sudo mysql -uroot -proot -e "STATUS;"
-      - name: find11
-        run: sudo find / -type f -name "*.cnf" | xargs grep "var/run/mysqld/mysqld.sock"
+      - name: find4
+        run: |
+          sudo cat /etc/mysql/mysql.conf.d/mysqld.cnf
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
           version: 9.5.2
           php_version: 7.4
           php_extensions: xdebug mbstring mysqli pdo_mysql
+
