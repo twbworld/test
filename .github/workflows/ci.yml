@@ -31,13 +31,10 @@ jobs:
       - name: find8
         run: sudo mysql -uroot -proot -e "STATUS;"
       - name: find11
-        run: |
-          sudo ln -s /var/run/mysqld/mysqld.sock /tmp/mysqld.sock
-          sudo ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
+        run: sudo find / -type f -name "*.cnf" | xargs grep "var/run/mysqld/mysqld.sock"
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
           version: 9.5.2
           php_version: 7.4
           php_extensions: xdebug mbstring mysqli pdo_mysql
-
