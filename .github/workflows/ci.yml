@@ -1,0 +1,20 @@
+name: ci
+on:
+  workflow_dispatch: #github页面手动触发
+  push: #push即触发
+    branches:
+      - master
+jobs:
+  unit-test:
+    runs-on: ubuntu-20.04 #虚拟环境(github提供)
+    steps:
+      - run: |
+          echo '================================11111'
+          sudo find / -name "*.socket"
+      - name: restart-mysql #该ubuntu-20.04自带mysql8.0
+        run: sudo systemctl restart mysql
+      - name: create-db
+        run: sudo mysqladmin -uroot -proot create trojan
+      - run: |
+          echo '================================222222'
+          sudo find / -name "*.socket"
