@@ -24,6 +24,8 @@ jobs:
         run: |
           sudo sed -i 's/pdo_mysql.default_socket=/pdo_mysql.default_socket=\/var\/run\/mysqld\/mysqld.sock/g' /etc/php/7.4/fpm/php.ini
           sudo sed -i 's/pdo_mysql.default_socket=/pdo_mysql.default_socket=\/var\/run\/mysqld\/mysqld.sock/g' /etc/php/7.4/cgi/php.ini
+          sudo sed -i 's/pdo_mysql.default_socket=/pdo_mysql.default_socket=\/var\/run\/mysqld\/mysqld.sock/g' /etc/php/7.4/cli/php.ini
+          sudo sed -i 's/pdo_mysql.default_socket=/pdo_mysql.default_socket=\/var\/run\/mysqld\/mysqld.sock/g' /etc/php/7.4/phpdbg/php.ini
       - name: find3
         run: sudo systemctl restart php7.4-fpm
       - uses: php-actions/phpunit@v2
