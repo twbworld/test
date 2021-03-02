@@ -21,15 +21,15 @@ jobs:
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
       - name: finda
-        run: sudo cat /etc/php/7.4/fpm/php-fpm.conf
+        run: sudo ls /etc/php/7.4/fpm/pool.d/
       - name: findb
-        run: sudo ls /etc/php/7.4/fpm/conf.d/
+        run: sudo cat /etc/php/7.4/fpm/conf.d/20-pdo_mysql.ini
       - name: findc
-        run: sudo ls /etc/php/7.4/cgi/conf.d/
+        run: sudo cat /etc/php/7.4/cgi/conf.d/20-pdo_mysql.ini
       - name: findd
-        run: sudo ls /etc/php/7.4/phpdbg/conf.d/
-      - name: finde
-        run: sudo ls /etc/hhvm/
+        run: sudo cat /etc/php/7.4/phpdbg/conf.d/20-pdo_mysql.ini
+      # - name: finde
+      #   run: sudo ls /etc/hhvm/
       # - name: find1
       #   run: |
       #     sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
