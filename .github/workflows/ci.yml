@@ -30,6 +30,8 @@ jobs:
         run: sudo systemctl restart mysql
       - name: find8
         run: sudo mysql -uroot -proot -e "STATUS;"
+      - name: find11
+        run: find / -type f -name "*.cnf" | xargs grep "var/run/mysqld/mysqld.sock"
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
