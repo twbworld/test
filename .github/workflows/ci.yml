@@ -24,7 +24,7 @@ jobs:
         run: sudo systemctl restart php7.4-fpm
       - name: find4
         run: |
-          sudo cat /etc/mysql/mysql.conf.d/mysqld.cnf
+          sudo cat /etc/mysql/mysql.conf.d/mysqld.cnf | grep "# socket"
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
