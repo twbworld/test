@@ -23,11 +23,8 @@ jobs:
       - name: find1
         run: |
           sudo sed '2 ipdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
-          sudo sed '2 ipdo_mysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/cgi/php.ini
       - name: find2
         run: sudo cat /etc/php/7.4/fpm/php.ini
-      - name: find3
-        run: sudo cat /etc/php/7.4/cgi/php.ini
       - name: find4
         run: sudo systemctl reload php7.4-fpm
       - uses: php-actions/phpunit@v2
