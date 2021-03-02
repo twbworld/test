@@ -17,4 +17,5 @@ jobs:
         run: sudo mysqladmin -uroot -proot create trojan
       - run: |
           echo '================================222222'
-          sudo find / -type f -name "my.cnf"
+          cat /var/lib/dpkg/alternatives/my.cnf
+          sudo docker ps
