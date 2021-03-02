@@ -21,9 +21,13 @@ jobs:
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
       - name: finda
-        run: |
-          ls /etc/mysql/mysql.conf.d/
-          ls /etc/mysql/conf.d/
+        run: sudo cat /etc/mysql/mysql.conf.d/mysql.cnf
+      - name: findb
+        run: sudo cat /etc/mysql/mysql.conf.d/mysqld.cnf
+      - name: findc
+        run: sudo cat /etc/mysql/conf.d/mysql.cnf
+      - name: findd
+        run: sudo cat /etc/mysql/conf.d/mysqldump.cnf
       # - name: find1
       #   run: |
       #     sudo sed '2 imysql.default_socket=/var/run/mysqld/mysqld.sock' -i /etc/php/7.4/fpm/php.ini
