@@ -4,18 +4,26 @@ on:
   push: #push即触发
     branches:
       - master
+    paths-ignore: #不作为触发的文件
+      - '.*'
+      - 'LICENSE'
+      - 'README.md'
 jobs:
   unit-test:
     runs-on: ubuntu-20.04 #虚拟环境(github提供)
     steps:
-      # - run: |
-      #     echo '================================11111'
-      #     sudo find / -name "mysql.sock"
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v5
       - name: restart-mysql #该ubuntu-20.04自带mysql8.0
         run: sudo systemctl restart mysql
       - name: create-db
         run: sudo mysqladmin -uroot -proot create trojan
-      - run: |
-          echo '================================1111'
-          sudo ls /var/run/mysqld/
-          echo '================================222222'
+      - name: save-data
+        run: sudo mysql -uroot -proot trojan < src/data/users.sql
+      - uses: php-actions/phpunit@v2
+        with:
+          configuration: ./phpunit.xml
+          version: 9.5.2
+          php_version: 7.4
+          php_extensions: xdebug mbstring mysqli pdo_mysql
+
