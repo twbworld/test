@@ -24,7 +24,12 @@ jobs:
         run: sudo systemctl restart php7.4-fpm
       - name: find4
         run: |
-          sudo cat /etc/mysql/mysql.conf.d/mysqld.cnf | grep "# socket"
+          sudo sed -i 's/# socket/socket/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+          sudo sed -i 's/\/var\/run\/mysqld\/mysqld.sock/\/tmp\/mysqld.sock/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+      - name: find1
+          run: sudo systemctl restart mysql
+      - name: find2
+          run: sudo mysql -uroot -proot -e "STATUS;"
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
