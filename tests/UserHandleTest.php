@@ -29,7 +29,9 @@ class UserHandleTest extends TestCase
         // $logs = $mock->handle();
 
 
-        var_dump(php_ini_loaded_file());exit();
+        var_dump(ini_get('mysql.default_socket'));
+        var_dump(ini_get('mysqli.default_socket'));
+        var_dump(ini_get('pdo_mysql.default_socket'));exit();
 
         // $this->assertStringStartsWith(key($data), $logs[0]);
         $s = $data;
