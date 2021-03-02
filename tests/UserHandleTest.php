@@ -29,7 +29,7 @@ class UserHandleTest extends TestCase
         // $logs = $mock->handle();
 
 
-        var_dump(phpinfo());exit();
+        var_dump(file_exists('/usr/local/etc/php/php.ini'));exit();
 
         // $this->assertStringStartsWith(key($data), $logs[0]);
         $s = $data;
