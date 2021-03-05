@@ -1,0 +1,20 @@
+name: handle
+on:
+  workflow_dispatch: #github页面手动触发
+  workflow_run: #workflow执行顺序,当前文件最后执行;必须为默认分支,否则不会触发,好奇怪
+    workflows:
+      - ci
+    branches:
+      - master
+    types:
+      - completed #requested || completed ;上一个"完成才执行下一个"
+    paths: #触发文件
+      - 'src/data/users.json'
+jobs:
+  update_users:
+    runs-on: ubuntu-20.04 #虚拟环境(github提供)
+    env:
+      TZ: Asia/Shanghai
+    steps:
+
+      - run: sudo ls
