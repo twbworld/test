@@ -24,6 +24,7 @@ jobs:
         run: sudo echo $ENVDATA > src/config/.env
       - name: ln-php7.4 #该ubuntu-20.04自带php8.0/7.4,php命令默认8.0,这里ln成7.4的
         run: |
+          sudo php -m
           sudo ln -sf /bin/php7.4 /bin/php
           sudo ln -sf /usr/bin/php7.4 /usr/bin/php
           sudo php -m
