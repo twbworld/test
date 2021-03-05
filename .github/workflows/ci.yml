@@ -26,6 +26,7 @@ jobs:
         run: |
           sudo ln -sf /bin/php7.4 /bin/php
           sudo ln -sf /usr/bin/php7.4 /usr/bin/php
+          sudo apt-get update
           sudo apt-get install linuxbrew-wrapper -y
           brew search php74-xdebug
           brew install php74-xdebug
