@@ -20,7 +20,7 @@ jobs:
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
       - name: add-envFile
         env:
-          ENVDATA='{"mysqlConfig":{"dbname":"trojan","host":"localhost","username":"root","password":"root"}}'
+          ENVDATA: '{"mysqlConfig":{"dbname":"trojan","host":"localhost","username":"root","password":"root"}}'
         run: sudo echo $ENVDATA > src/config/.env
       - name: ln-php7.4 #该ubuntu-20.04自带php8.0/7.4,php命令默认8.0,这里ln成7.4的
         run: |
