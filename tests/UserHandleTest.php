@@ -17,6 +17,7 @@ class UserHandleTest extends TestCase
     }
 
     /**
+     * @dataProvider dataHandle
      * @covers Library\UserHandle::handle
      * @todo   Implement testHandle().
      */
@@ -34,6 +35,60 @@ class UserHandleTest extends TestCase
         $this->assertStringStartsWith('a', 'aa');
     }
 
+
+    public function dataHandle(): array
+    {
+        return [
+            [[
+                'add' => [
+                    [
+                        "username" => "test",
+                        "password" => "90a3ed9e32b2aaf4c61c410eb925426119e1a9dc53d4286ade99a809",
+                        "quota" => 107374182400,
+                        "enable" => true,
+                        "level" => 0,
+                        "expiryDate" => "2050-01-01",
+                        "passwordShow" => "dGVzdA==",
+                    ],
+                    [
+                        "username" => "test2",
+                        "password" => "90a3ed9e32b2aaf4c61c410eb925426119e1a9dc53d4286ade99a809",
+                        "quota" => 107374182400,
+                        "enable" => true,
+                        "level" => 0,
+                        "expiryDate" => "2050-01-01",
+                        "passwordShow" => "dGVzdA==",
+                    ],
+                ],
+            ]],
+            [[
+                'del' => [
+                    [
+                        "username" => "test",
+                        "password" => "90a3ed9e32b2aaf4c61c410eb925426119e1a9dc53d4286ade99a809",
+                        "quota" => 107374182400,
+                        "enable" => true,
+                        "level" => 0,
+                        "expiryDate" => "2050-01-01",
+                        "passwordShow" => "dGVzdA==",
+                    ],
+                ],
+            ]],
+            [[
+                'update' => [
+                    [
+                        "username" => "test",
+                        "password" => "90a3ed9e32b2aaf4c61c410eb925426119e1a9dc53d4286ade99a809",
+                        "quota" => 107374182400,
+                        "enable" => true,
+                        "level" => 0,
+                        "expiryDate" => "2050-01-02",
+                        "passwordShow" => "dGVzdA==",
+                    ],
+                ],
+            ]],
+        ];
+    }
 
 
 }
