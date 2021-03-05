@@ -647,3 +647,12 @@
 2021-03-05 19:32:20   测试
 2021-03-05 19:32:20   测试2
 2021-03-05 19:32:20   测试3
+2021-03-05 19:35:03   add: {"username":"test","password":"90a3ed9e32b2aaf4c61c410eb925426119e1a9dc53d4286ade99a809","quota":107374182400,"enable":true,"level":0,"expiryDate":"2050-01-01","passwordShow":"dGVzdA==","useDays":30}
+2021-03-05 19:35:03   add: {"username":"test2","password":"90a3ed9e32b2aaf4c61c410eb925426119e1a9dc53d4286ade99a809","quota":107374182400,"enable":true,"level":0,"expiryDate":"2050-01-01","passwordShow":"dGVzdA==","useDays":30}
+2021-03-05 19:35:03   del: {"id":"108","username":"test2","passwordShow":"dGVzdA==","quota":"107374182400","useDays":"30","expiryDate":"2050-01-01"}
+2021-03-05 19:35:03   过期用户处理: [107]test
+2021-03-05 19:35:03   update: {"id":"107","username":"test","passwordShow":"dGVzdA==","quota":"107374182400","useDays":"30","expiryDate":"2050-01-01"} => {"username":"test","password":"90a3ed9e32b2aaf4c61c410eb925426119e1a9dc53d4286ade99a809","quota":107374182400,"enable":true,"level":0,"expiryDate":"2021-03-05","passwordShow":"dGVzdA==","useDays":30,"id":"107"}
+2021-03-05 19:35:03   !!!!!!!!!!!!!!!!!!!!! Clear: 流量清零 !!!!!!!!!!!!!!!!!!!!!!
+2021-03-05 19:35:03   测试
+2021-03-05 19:35:03   测试2
+2021-03-05 19:35:03   测试3
