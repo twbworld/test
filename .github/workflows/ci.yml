@@ -27,3 +27,5 @@ jobs:
           sudo ln -sf /bin/php7.4 /bin/php
           sudo ln -sf /usr/bin/php7.4 /usr/bin/php
           sudo php -m
+      - name: phpunit-test
+        run: sudo XDEBUG_MODE=coverage ./vendor/bin/phpunit #如果不设置XDEBUG_MODE,coverage.xml文件会导不出
