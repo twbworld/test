@@ -4,13 +4,11 @@ on:
   push: #push即触发
     branches:
       - master
-    paths-ignore: #不作为触发的文件
-      - '.*'
-      - 'LICENSE'
-      - 'README.md'
 jobs:
   unit-test:
     runs-on: ubuntu-20.04 #虚拟环境(github提供)
+    env:
+      TZ: Asia/Shanghai
     steps:
       - uses: actions/checkout@v2
       - uses: php-actions/composer@v5
@@ -20,21 +18,9 @@ jobs:
         run: sudo mysqladmin -uroot -proot create trojan
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
-      # - name: find5
-      #   run: sudo systemctl restart php7.4-fpm
-      - name: find1
-        run: php -m
-      - name: find2
+      - name: ln-php7.4 #该ubuntu-20.04自带php8.0/7.4,php命令默认8.0,这里ln成7.4的
         run: |
-          sudo brew search php74-xdebug
-          sudo brew install php74-xdebug
-          sudo brew services restart php74
-      - name: find3
-        run: php -m
-      - uses: php-actions/phpunit@v2
-        with:
-          configuration: ./phpunit.xml
-          version: 9.5.2
-          php_version: 7.4
-          php_extensions: xdebug mbstring mysqli pdo_mysql
-
+          sudo ln -sf /bin/php7.4 /bin/php
+          sudo ln -sf /usr/bin/php7.4 /usr/bin/php
+      - name: phpunit-test
+        run: sudo XDEBUG_MODE=coverage ./vendor/bin/phpunit #如果不设置XDEBUG_MODE,coverage.xml文件会导不出
