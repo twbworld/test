@@ -26,10 +26,11 @@ jobs:
         run: |
           sudo ln -sf /bin/php7.4 /bin/php
           sudo ln -sf /usr/bin/php7.4 /usr/bin/php
-          sudo apt-get aa
+          sudo apt-get install aaa
       - name: phpunit-test
         run: sudo XDEBUG_MODE=coverage ./vendor/bin/phpunit #如果不设置XDEBUG_MODE,coverage.xml文件会导不出
   test2:
+    needs: unit-test
     runs-on: ubuntu-20.04 #虚拟环境(github提供)
     steps:
-      - run: sudo ls
+      - run: sudo ls /
