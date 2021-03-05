@@ -8,6 +8,7 @@ on:
       - master
     types:
       - completed #requested || completed ;上一个"完成才执行下一个"
+  push:
     paths: #触发文件
       - 'src/data/users.json'
 jobs:
