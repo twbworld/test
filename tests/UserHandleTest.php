@@ -30,12 +30,40 @@ class UserHandleTest extends TestCase
         $logs = $mock->handle();
 
         $this->assertStringStartsWith(key($data), $logs[0]);
-
-
-        // $s = $data;
-        // $this->assertStringStartsWith('a', 'aa');
     }
 
+    /**
+     * @covers Library\UserHandle::getUsersByJson
+     * @todo   Implement testGetUsersByJson().
+     */
+    public function testGetUsersByJson(): void
+    {
+        $result = $this->object->getUsersByJson();
+
+        $this->assertIsArray($result);
+        $this->assertIsString($result[0]['password']);
+    }
+
+    /**
+     * @covers Library\UserHandle::clear
+     * @todo   Implement testClear().
+     */
+    public function testClear(): void
+    {
+        $this->object->clear();
+
+        $this->expectOutputString('流量清零完成' . PHP_EOL);
+    }
+
+    /**
+     * @dataProvider dataLog
+     * @covers Library\UserHandle::log
+     * @todo   Implement testLog().
+     */
+    public function testLog($data): void
+    {
+        $this->assertTrue($this->object::log($data));
+    }
 
     public function dataHandle(): array
     {
@@ -83,7 +111,7 @@ class UserHandleTest extends TestCase
                         "quota" => 107374182400,
                         "enable" => true,
                         "level" => 0,
-                        "expiryDate" => date("Y-m-d"),
+                        "expiryDate" => date("Y-m-d"), //便于expiry方法使用
                         "passwordShow" => "dGVzdA==",
                     ],
                 ],
@@ -91,5 +119,12 @@ class UserHandleTest extends TestCase
         ];
     }
 
+    public function dataLog(): array
+    {
+        return [
+            ['测试'],
+            [['测试2', '测试3']],
+        ];
+    }
 
 }
