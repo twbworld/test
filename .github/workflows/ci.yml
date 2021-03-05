@@ -27,8 +27,7 @@ jobs:
           sudo ln -sf /bin/php7.4 /bin/php
           sudo ln -sf /usr/bin/php7.4 /usr/bin/php
           sudo apt-get update
-          sudo apt-get remove php-xdebug -y
-          sudo apt-get install php-xdebug -y
+          sudo apt-get reinstall php-xdebug -y
           sudo systemctl restart php7.4-fpm
           sudo php -m
       - name: phpunit-test
