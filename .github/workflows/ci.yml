@@ -20,14 +20,17 @@ jobs:
         run: sudo mysqladmin -uroot -proot create trojan
       - name: save-data
         run: sudo mysql -uroot -proot trojan < src/data/users.sql
-      - name: find5
-        run: sudo systemctl restart php7.4-fpm
-      - name: find4
-        run: |
-          sudo sed -i 's/# socket/socket/g' /etc/mysql/mysql.conf.d/mysqld.cnf
-          sudo sed -i 's/\/var\/run\/mysqld\/mysqld.sock/\/tmp\/mysqld.sock/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+      # - name: find5
+      #   run: sudo systemctl restart php7.4-fpm
       - name: find1
-        run: sudo systemctl restart mysql
+        run: php -m
+      - name: find2
+        run: |
+          sudo brew search php74-xdebug
+          sudo brew install php74-xdebug
+          sudo brew services restart php74
+      - name: find3
+        run: php -m
       - uses: php-actions/phpunit@v2
         with:
           configuration: ./phpunit.xml
