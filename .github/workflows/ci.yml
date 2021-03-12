@@ -4,7 +4,7 @@ on:
     tags:
       - "v*.*"
 env:
-  IMAGE_NAME: twbtest
+  IMAGE_NAME: aaa
 
 jobs:
 
