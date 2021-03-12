@@ -88,7 +88,4 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:${{ needs.get-tags.outputs.tags }}
             ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
-      - uses: actions/delete-package-versions@v1
-        with:
-          package-name: ${{ env.IMAGE_NAME }}
-          num-old-versions-to-delete: 1
+
