@@ -1,7 +1,8 @@
 name: ci
 on:
-  release:
-    types: [published]
+  push: #push即触发
+    branches:
+      - master
 jobs:
   push_to_registries:
     name: Push Docker image to multiple registries
