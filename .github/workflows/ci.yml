@@ -20,5 +20,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ github.repository }}/twbtest:v10.0
+          tags: ${{ github.repository }}/v2ray-trojan:v10.0
           file: ./Dockerfile
