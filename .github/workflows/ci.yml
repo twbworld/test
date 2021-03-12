@@ -23,7 +23,7 @@ jobs:
           fi
           echo ::set-output name=tags::${VERSION}
 
-  github-Packages:
+  github-packages:
     needs: prepare
     runs-on: ubuntu-20.04
     env:
