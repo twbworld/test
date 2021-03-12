@@ -3,15 +3,12 @@ on:
   push: #push即触发
     tags:
       - "v*.*"
-    paths: #不作为触发的文件
-      - 'Dockerfile'
-      - 'install.sh'
 env:
-  DOCKER_IMAGE: twbtest
+  IMAGE_NAME: twbtest
 
 jobs:
 
-  prepare:
+  get-tags:
     runs-on: ubuntu-20.04
     outputs:
       tags: ${{ steps.set-output-id.outputs.tags }}
@@ -26,18 +23,18 @@ jobs:
           fi
           echo ::set-output name=tags::${VERSION}
 
-  github-packages:
-    needs: prepare
+  push-github-packages:
+    needs: get-tags
     runs-on: ubuntu-20.04
     env:
-      REGISTRY: docker.pkg.github.com
+      REGISTRY: ghcr.io
     steps:
       - uses: actions/checkout@v2
       - name: Login
         uses: docker/login-action@v1
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.PACKAGES_TOKEN }}
       - name: Build && Push
         uses: docker/build-push-action@v2
@@ -46,25 +43,6 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE }}:${{ needs.prepare.outputs.tags }}
-            ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE }}:latest
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ needs.prepare.outputs.tags }}
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
 
-  docker-hub:
-    needs: prepare
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Login
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build && Push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:${{ needs.prepare.outputs.tags }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
