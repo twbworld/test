@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 LABEL maintainer="twb<1174865138@qq.com><github.com/twbworld>"
-LABEL description="构建v2ray-trojan镜像"
+LABEL description="构建v2ray-trojan镜像q"
 
 WORKDIR /root
 
