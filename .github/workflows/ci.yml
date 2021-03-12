@@ -69,6 +69,7 @@ jobs:
         with:
           package-name: ${{ env.IMAGE_NAME }}
           num-old-versions-to-delete: 1
+          token: ${{ secrets.PACKAGES_TOKEN }}
 
   # push-github-packages:
   #   needs: get-tags
