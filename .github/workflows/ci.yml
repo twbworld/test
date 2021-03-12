@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: set-output
+        id: set-output
         run: |
           DOCKER_IMAGE=${{ env.REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE }}
           VERSION=edge
@@ -35,6 +36,7 @@ jobs:
     # strategy: ${{ needs.prepare.outputs.tags }}
     steps:
       - run: echo "${{ needs.prepare.outputs.tags }}"
+      - uses: actions/checkout@v2
       - name: Login
         uses: docker/login-action@v1
         with:
