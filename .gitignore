@@ -40,6 +40,12 @@ runtime/
 cache/
 temp/
 
+#log
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 #Build
 dist/
@@ -68,9 +74,4 @@ ehthumbs_vista.db
 /jspm_packages
 /bower_components
 .eslintcache
-
-
-.phpunit.result.cache
-/tests/report/*
-!.gitkeep
 .env

@@ -1,36 +1,19 @@
 name: ci
 on:
-  workflow_dispatch: #github页面手动触发
-  push: #push即触发
-    branches:
-      - master
+  release:
+    types: [published]
 jobs:
-  unit-test:
-    runs-on: ubuntu-20.04 #虚拟环境(github提供)
-    env:
-      TZ: Asia/Shanghai
+  push_to_registries:
+    name: Push Docker image to multiple registries
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: php-actions/composer@v5
-      - name: restart-mysql #该ubuntu-20.04自带mysql8.0
-        run: sudo systemctl restart mysql
-      - name: create-db
-        run: sudo mysqladmin -uroot -proot create trojan
-      - name: save-data
-        run: sudo mysql -uroot -proot trojan < src/data/users.sql
-      - name: add-envFile
-        env:
-          ENVDATA: '{"superUrl":["vmess://aa=="],"trojan":[{"domain":"www.domain.com","port":"80"}],"mysqlConfig":{"dbname":"trojan","host":"localhost","username":"root","password":"root"}}'
-        run: sudo echo $ENVDATA > src/config/.env
-      - name: ln-php7.4 #该ubuntu-20.04自带php8.0/7.4,php命令默认8.0,这里ln成7.4的
-        run: |
-          sudo ln -sf /bin/php7.4 /bin/php
-          sudo ln -sf /usr/bin/php7.4 /usr/bin/php
-          sudo apt-get install aaa
-      - name: phpunit-test
-        run: sudo XDEBUG_MODE=coverage ./vendor/bin/phpunit #如果不设置XDEBUG_MODE,coverage.xml文件会导不出
-  test2:
-    needs: unit-test
-    runs-on: ubuntu-20.04 #虚拟环境(github提供)
-    steps:
-      - run: sudo ls /
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.PACKAGES_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: twbworld/test/v2ray-trojan
+          tag_with_ref: true
