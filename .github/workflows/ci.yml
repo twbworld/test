@@ -4,7 +4,7 @@ on:
     tags:
       - "v*.*"
 env:
-  IMAGE_NAME: aaa
+  IMAGE_NAME: testmy
 
 jobs:
 
