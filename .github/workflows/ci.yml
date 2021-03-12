@@ -10,6 +10,8 @@ env:
 jobs:
   prepare:
     runs-on: ubuntu-20.04
+    outputs:
+      tags: ${{ steps.set-output-id.outputs.tags }}
     steps:
       - uses: actions/checkout@v2
       - name: set-output
@@ -33,7 +35,6 @@ jobs:
     runs-on: ubuntu-20.04
     # strategy: ${{ needs.prepare.outputs.tags }}
     steps:
-      - run: echo "${{ needs.prepare.outputs.tags }}"
       - uses: actions/checkout@v2
       - name: Login
         uses: docker/login-action@v1
