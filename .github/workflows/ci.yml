@@ -3,6 +3,9 @@ on:
   push: #push即触发
     tags:
       - "v*.*"
+    paths: #不作为触发的文件
+      - 'Dockerfile'
+      - 'install.sh'
 env:
   DOCKER_IMAGE: twbtest
 
