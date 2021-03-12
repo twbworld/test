@@ -10,12 +10,10 @@ env:
 jobs:
   prepare:
     runs-on: ubuntu-20.04
-    outputs:
-      tags: ${{ steps.set-output.outputs.tags }}
     steps:
       - uses: actions/checkout@v2
       - name: set-output
-        id: set-output
+        id: set-output-id
         run: |
           DOCKER_IMAGE=${{ env.REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE }}
           VERSION=edge
@@ -49,4 +47,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ needs.prepare.outputs.tags.tags }}
+          tags: |
+            ${{ needs.prepare.outputs.tags }}
