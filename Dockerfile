@@ -10,19 +10,6 @@ WORKDIR /root
 ADD install.sh .
 
 RUN set -xe \
-        && apt-get update \
-        && apt-get install -y --no-install-recommends \
-          curl \
-          wget \
-          vim \
-          git \
-          init \
-          systemd \
-          openssl \
-          ca-certificates \
-          cron \
-          xz-utils \
-          nano \
         && cd /root \
         # && wget -N --no-check-certificate -q -O install.sh "${INSTALL}" \
         && chmod +x *.sh \
