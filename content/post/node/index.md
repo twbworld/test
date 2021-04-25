@@ -7,7 +7,7 @@ summary: "平时学习中,比较重要的知识点,记下来备忘"
 
 # 标签
 tags:
-- Node
+- Note
 
 #关键字
 keywords:
@@ -87,7 +87,7 @@ image:
   caption: "图片来源: [**wikihow**](https://www.wikihow.com/)"
   focal_point: "Center"
   preview_only: true
-  alt_text: "Node"
+  alt_text: "Note"
 
 # 文章页最头部的图片,如果当前目录下没有featured.jpg/png文件,且,三方image没设置image,则列表页也会显示这图片(image如设置了image,此处无效)
 #header:
@@ -165,11 +165,12 @@ image:
 | systemctl status nginx.service    | 查看状态(或service nginx status) |
 | chkconfig iptables off            | 永久关闭防火墙 |
 | chkconfig iptables on             | 永久关闭后重启 |
-| ln                                | 软连接 |
+| ln -s                                | 软连接 |
 | nohup <shell\>                     | 在后台运行shell命令 |
 | tree -LNFC 2                       | tree软件常用命令 |
 | tar -xaf                        | 识别压缩文件类型,进行解压(-caf) |
 | unzip -O cp936                  | zip文件解压避免乱码 |
+| scp -r /var root@127.0.0.1:/var/ | 目录传输 |
 | find / -type f -name "*.txt" \| xargs grep "hello" | 查找文件内容 |
 | cat <filename\> \| openssl dgst -sha256 -binary \| openssl base64 -A | 计算文件sha256校验值(css校验方法:`<link href="filename.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=">`) |
 | sha256sum filename | 计算文件md5校验值 |
