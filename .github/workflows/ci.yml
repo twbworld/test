@@ -26,40 +26,8 @@ on:
       - '.gitattributes'
       - '.gitmodules'
 jobs:
-  ci:
-    runs-on: ubuntu-20.04 #虚拟环境(github提供)
-    steps:
-
-      - uses: actions/checkout@v2.3.4 #官方Action, pull当前git项目
-        with:
-          persist-credentials: false #不保存证书(当前Action的参数)
-          submodules: recursive #true OR recursive
-          fetch-depth: 0
-
-      - name: Read .env
-        id: hugo-version
-        run: | #读取Hugo版本
-          . ./.env
-          echo "::set-output name=HUGO_VERSION::${HUGO_VERSION}"
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '${{ steps.hugo-version.outputs.HUGO_VERSION }}'
-          extended: true
-
-      - name: Build
-        run: hugo --minify
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          publish_branch: gh-pages #新建分支
 
   review:
-    needs: ci
     runs-on: ubuntu-20.04 #虚拟环境(github提供)
     env:
       TZ: Asia/Shanghai
