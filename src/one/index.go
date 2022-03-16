@@ -3,8 +3,8 @@ package main //包名
 import (
 	"encoding/json"
 	"fmt"
-	libali "lib1"
-	_ "lib2" //匿名调用.只会执行init
+	libali "mymod/src/lib1"
+	_ "mymod/src/lib2" //匿名调用.只会执行init
 	"reflect"
 	"time"
 )
