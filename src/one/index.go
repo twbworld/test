@@ -108,7 +108,7 @@ func (this Stru4) Call() {
 
 func main() {
     a := 1 //这种赋值方式只能用在func体内
-    fmt.Printf("类型: %T ; 值: %s\n", a, a)
+    fmt.Printf("类型: %T ; 值: %v\n", a, a)
 
 
     var b string
@@ -156,7 +156,7 @@ func main() {
     fmt.Println("=============")
 
     // var arr [3]int
-    arr := [3]int {3, 2}
+    arr := [4]int {9, 7} //不足4个的, 补0
 
     for i := 0; i < len(arr); i++{
         fmt.Println(arr[i])

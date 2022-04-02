@@ -9,6 +9,6 @@ func init(){
 }
 
 //方法名小写开头是私有方法
-func Index(){
+func Index2(){
 	fmt.Println("这是index2")
 }

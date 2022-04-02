@@ -1,15 +1,14 @@
 package lib1
 
 import (
-	"fmt"
+    "fmt"
 )
 
+
 func init(){
-    fmt.Println("这是init")
+    fmt.Println("初始化完成")
 }
 
-
-//方法名小写开头是私有方法
 func Index(){
-	fmt.Println("这是index")
+    fmt.Println("成功调用index")
 }
