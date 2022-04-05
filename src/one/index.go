@@ -1,475 +1,382 @@
-package main //包名
+package main
 
 import (
 	"encoding/json"
 	"fmt"
-	libali "mymod/src/lib1"
-	_ "mymod/src/lib2" //匿名调用.只会执行init
+	_ "mymod/src/lib1"
 	"reflect"
 	"time"
 )
 
-//结构体
-//这里名称的大小写有区别
-type Stru struct {
-    a string
-    b int
+type Aa struct {
+    a int `info:"这是a信息" doc:"这是文档"`
+    b string `info:"这是b信息" doc:"这是文档"`
 }
 
-type Stru2 struct {
-    Stru
-    b int
-}
-
-type Stru3 struct{
-    a string
-    b int
+// json 包只能识别大写开头的属性
+type Bb struct {
+    A int
+    B string `json:"bj"` //改变json的key值
 }
 
 
-//==========================
-
-type class1 interface {
-    GetColor() string
-    GetType() string
+func f1(a *int, b string)(int, string){
+    *a += 1
+    return *a, b + "aaaa"
 }
 
-type Cat struct {
-    color string
+func f2(){
+    defer fmt.Println("f4")
+    fmt.Println("f3")
 }
 
-func (this Cat) GetColor() (string){
-    return this.color
-}
-func (this Cat) GetType() (string){
-    return "the cat"
-}
-
-func all(an class1) (string){
-    return an.GetColor()
-}
-
-
-//=========================================
-
-
-func f8(va interface{}){
-    val, ok := va.(string)
-    if ok{
-        fmt.Println("是str, val是", val)
-    }else{
-        fmt.Println("不是str")
+//interface可以传递任何格式的参数
+func (this *Aa) f3(vb interface{}){
+    fmt.Printf("Aa 下的方法, 详情: %#v\n", this.a)
+    _, ok := vb.(int)
+    if ok {
+        fmt.Printf("传递了int参数; 详情: %#v\n", vb)
+    }else {
+            fmt.Printf("传递的不是int; 详情: %#v\n", vb)
     }
 }
 
 
+func f5(ea [4]int, ba []string, ca Aa, ca2 *Aa){
+    for i := 0; i < len(ea); i++{
+        fmt.Println(ea[i])
+    }
 
-//=========================================
-type Reader interface {
-    ReadBook()
+    for _, v := range ba{
+        fmt.Println(v)
+    }
+
+    //只能遍历数组,不能直接遍历结构体
+    caType := reflect.TypeOf(ca)
+    caValue := reflect.ValueOf(ca)
+    caCount := caType.NumField()
+    for i := 0; i < caCount; i++ {
+        fmt.Println(caType.Field(i).Name, ":", caValue.Field(i), "`", caType.Field(i).Tag.Get("info"), "`")
+    }
+
+    //指针类型需要使用Elem()
+    ca2Type := reflect.TypeOf(ca2).Elem()
+    for i := 0; i < ca2Type.NumField(); i++ {
+        fmt.Println(ca2Type.Field(i).Name)
+    }
+
+    fmt.Printf("完整: %+v; go语法: %#v \n", ca, ca)
 }
 
-type Writer interface {
-    WriterBook()
+type c1 interface{
+    f6() string
 }
 
-type Book struct {
-}
-
-func (this Book) ReadBook(){
-    fmt.Println("read")
-}
-func (this Book) WriterBook(){
-    fmt.Println("writer")
-}
-//=========================================
-
-
-
-type Stru4 struct {
-    A1 int `info:"这是A1信息" doc:"这是文档"`
-    A2 string `info:"这是A2信息" doc:"这是文档"`
-}
-
-type Stru5 struct{
-    Name string `json:"a"`
-    Sex int `json:"b"`
-    Body []string `json:"c"`
-}
-
-
-func (this Stru4) Call() {
-    fmt.Println("这里进入了call")
+func (this Aa)f6() (string){
+    return this.b
 }
 
 
 
-//=========================================
+//=========================
+type Book struct{
+
+}
+type ReadBook interface{
+    read()
+}
+type WriteBook interface{
+    write()
+}
+func (this Book)read(){
+    fmt.Println("这是read\n")
+}
+func (this Book)write(){
+    fmt.Println("这是write\n")
+}
+//=========================
+
+
+
+
+
+
+
 
 func main() {
-    a := 1 //这种赋值方式只能用在func体内
-    fmt.Printf("类型: %T ; 值: %v\n", a, a)
+    fmt.Println("===========\n")
 
+    a := 1 //这种赋值方式只能用在func体内
 
     var b string
     b = "2"
-    fmt.Printf("类型: %T ; 值: %s\n", b, b)
-
-    var c int = 3
-    fmt.Printf("类型: %T\n", c)
-
-    d := 3.14
-    fmt.Printf("类型: %T\n", d)
-
-    // fmt.Println("类型: %T\n", e)
 
     var f, g = 100, "f"
-    fmt.Println(f, g)
+
+    var c int = 3
 
     var (
         h int = 1
     )
-    fmt.Println(h)
+    fmt.Printf("类型: %T ; 值: %v\n", a, a)
+    fmt.Println(b, f, g, c, h)
+
+
+    fmt.Println("===========\n")
+
+
 
 
     const (
         i = iota
         j
+        k
     )
-    // i = 2
-    fmt.Println(i,j)
 
-    fmt.Println("=============")
+    fmt.Println(i,j,k)
 
-    h += 2
+    fmt.Println("===========\n")
 
-    aw, ae := f1(&h, "11")
-    fmt.Println(aw, ae)
 
-    fmt.Println("=============")
 
-    libali.Index()
 
-    fmt.Println("=============")
 
-    f5();
-    fmt.Println("=============")
+    l := 1
+    m := "c"
 
-    // var arr [3]int
+    ac, ad := f1(&l, m)
+
+    fmt.Println(ac, ad, l, m);
+
+    fmt.Println("===========\n")
+
+
+
+
+    f2()
+
+    fmt.Println("===========\n")
+
+
+
+
+
     arr := [4]int {9, 7} //不足4个的, 补0
+    arr2 := []string {"vv", "ff"} //动态数组,切片
+    arr3 := Aa{a: 88, b: "cc"}
+    f5(arr, arr2, arr3, &arr3)
 
-    for i := 0; i < len(arr); i++{
-        fmt.Println(arr[i])
+    fmt.Println("===========\n")
+
+
+
+
+    arr4 := make([] int, 2, 3) //初始2个数据,预留多1个空间
+    fmt.Printf("%+v \n", arr4)
+    fmt.Println("长度", len(arr4), cap(arr4))
+
+    arr4 = append(arr4, 1)
+    arr4 = append(arr4, 2)
+
+    fmt.Printf("%+v \n", arr4)
+    fmt.Println("长度", len(arr4), cap(arr4)) //用完了预留的空间, 自动将空间扩大一倍
+
+    fmt.Println("=============\n")
+
+
+
+
+
+    arr5 := arr4[1:3] //截取, 从第2个到第4个
+    arr6 := make([]int, 3)
+
+    arr6[1] = 100;
+
+    fmt.Println(arr5, arr6)
+
+
+    fmt.Println("=============\n")
+
+
+
+
+
+
+
+
+    arr7 := [] int{2,3,4}
+    arr8 := [] int{8,9,10,11}
+
+    copy(arr7, arr8) //arr7 == [8,9,10]
+    copy(arr8, arr7) // arr8 == [8,9,10,11]
+
+    fmt.Println(arr7, arr8) //切面会使用指针,使用copy可避免
+
+    fmt.Println("=============\n")
+
+
+
+
+
+    var arr9 map[string]int
+    arr9 = make(map[string]int, 2)
+
+    arr9["中国"] = 86
+    arr9["美利坚"] = 1
+    arr9["加拿大"] = 2
+    fmt.Printf("内容: %#v\n", arr9)
+
+    delete(arr9, "中国")
+
+    fmt.Printf("内容: %#v\n", arr9)
+
+    fmt.Println("=============\n")
+
+
+
+
+    jf := Aa{a: 7987, b: "测视力"}
+
+    jf.f3(jf)
+    jf.f3(jf.a)
+
+    fmt.Println("=============\n")
+
+
+
+
+
+    //类似工厂模式,用c1类限制调用的方法(f6())
+    var an c1
+    an = Aa{a: 809, b: "打开水"}
+
+    fmt.Printf("内容: %#v\n", an.f6())
+
+    fmt.Println("=============\n")
+
+
+    //类似工厂模式
+    var fsd ReadBook
+    fsd = Book{}
+    fsd.read()
+
+    var abb WriteBook
+    abb = fsd.(WriteBook)
+    abb.write()
+
+    fmt.Println("=============\n")
+
+
+
+
+
+
+    gd := Bb{A: 666, B: "json测试"}
+
+    jsonStr, err := json.Marshal(gd) //转化为json字符串
+    if err != nil {
+        fmt.Println("出错")
     }
-    for key, value := range arr{
-        fmt.Println(";key:", key, "; value:", value)
-    }
-    fmt.Println("=============")
+    fmt.Printf("%s\n", jsonStr)
 
-    arr2 := []int {3, 1, 9} //动态数组,切片
-    f6(arr2);
-    fmt.Printf("详情 = %v",arr2)
+    dsa := Bb{}
+    json.Unmarshal(jsonStr, &dsa)
+    dsa.A += 1
+    fmt.Printf("%#v\n", dsa)
 
     fmt.Println("=============\n")
 
 
-    arr3 := make([] int, 3, 5) //3个数据,5个空间
-
-    if arr3 == nil {
-        fmt.Println("+++++");
-    }
-
-    arr3 = append(arr3, 2)
-    arr3 = append(arr3, 3)
-    arr3 = append(arr3, 3)
-
-    fmt.Printf("cap = %d\n, arr = %v\n", cap(arr3), arr3)
-
-    fmt.Println("=============\n")
-    arr4 := arr3[3:5]
-
-    arr5 := make([]int, 2)
-    copy(arr5, arr4);
-    arr3[3] = 100
-
-    fmt.Println(arr4, arr5) //切面会使用指针,使用copy可避免
-
-    fmt.Println("=============\n")
-
-    var arr6 map[string]int
-
-    arr6 = make(map[string]int, 10)
-
-    arr6["one"] = 1
-    arr6["two"] = 2
-    arr6["three"] = 3
-    arr6["for"] = 3
-    delete(arr6, "one")
-    fmt.Println(arr6)
-    fmt.Println("=============\n")
-
-    stru := Stru{a: "a", b: 1}
-
-    f7(&stru)
-    stru.f8()
-
-    fmt.Println(stru)
-    fmt.Println("=============\n")
 
 
-    // stru2 := Stru2{Stru{"a2", 2}, 33}
-    var stru2 Stru2
-    stru2.a = "a4"
-    stru2.b = 55
-
-    fmt.Println(stru2)
-
-    stru2.f9()
-
-    fmt.Println("=============\n")
-
-     var an class1
-     an = &Cat{"red"}
-     fmt.Println(all(an))
-
-    fmt.Println("=============\n")
-
-    f8("str")
-    f8(11)
-    fmt.Println("=============\n")
-
-    test2 := &Book{}
-
-    var test3 Reader
-
-    test3 = test2
-    test3.ReadBook()
-
-    var test4 Writer
-
-    test4 = test3.(Writer)
-
-    test4.WriterBook()
-    fmt.Println("=============\n")
-
-    // test5 := Stru3{a: "这是a", b: 22222}
-    test6 := []int{1, 2}
-
-    f9(test6)
-    fmt.Println("=============\n")
 
 
-    var test7 = Stru4{22, "这是字符串"}
-    Dofm(test7)
-    fmt.Println("=============\n")
 
-    var test8 Stru4
-    Dofm2(&test8)
-    fmt.Println("=============\n")
 
-    test9 := Stru5{"忐忑", 2, []string{"head", "eas"}}
-    Dofm3(&test9)
-    fmt.Println("=============\n")
+    fsdjj := make(chan int);
 
-    //管道,用于与携程通讯
-    test10 := make(chan int)
-    go func (){
-        defer fmt.Println("A结束")
-
-        func (a int, b string){
-            defer fmt.Println(b)
-            test10 <- 888
-            fmt.Println(a)
-        }(1,"B结束")
-
-        fmt.Println("A1")
+    go func() {
+        defer fmt.Println("go defer")
+        fsdjj <- 66
+        fmt.Println("go")
     }()
 
-    fmt.Println("chanl is" , <-test10)
+    fmt.Println(<-fsdjj)
 
     fmt.Println("=============\n")
 
-    test11 := make(chan int, 3)
+
+
+
+
+    ffs := make(chan int, 3)
+
     go func() {
         defer fmt.Println("协程结束")
 
-        for i := 0; i < 4; i++{
-            test11 <- i
+        for i := 0; i < 10; i++ {
+            ffs <- i
             fmt.Println("协程正在运行", i)
         }
 
-        close(test11)
+        close(ffs)
 
     }()
 
-    time.Sleep(1 * time.Second)
-
-    // for i := 0; i < 99; i++{
-    //     if data, ok := <- test11; ok{
-    //         fmt.Println("值:", data,"长度", len(test11), "cap:", cap(test11))
-
-    //     }else{
-    //         fmt.Println("break")
-    //         break;
+    // for i := 0; i < 10; i++ {
+    //     if data, ok := <-ffs; ok {
+    //         fmt.Println("值:", data, "长度:", len(ffs), "空间:",cap(ffs))
     //     }
     // }
 
-    for data := range test11 {
+    for data := range ffs{
         //这里的range会阻塞等待
-        fmt.Println("值:", data,"长度", len(test11), "cap:", cap(test11))
+        fmt.Println("值:", data, "长度:", len(ffs), "空间:",cap(ffs))
     }
+
     fmt.Println("=============\n")
 
 
 
 
-    test12 := make(chan int)
-    test13 := make(chan int)
+
+
+
+    ch1 := make(chan int)
+    ch2 := make(chan int)
 
     go func() {
-        for i := 0; i < 6; i++{
-            fmt.Println("这是:", <-test12)
+        for i := 0; i < 6; i++ {
+            fmt.Println("协程读取", <-ch1)
         }
-        test13 <- 1
+        ch2 <- 1
     }()
 
-    aj := 1
-    ak := 1
+    aj := 1;
+    ak := 1;
 
 L:
-    for {
-        select {
-        case test12 <- aj:
-            //test12可写就会进来
-            aj = ak + aj
-        case <- test13:
+    for{
+        select{
+        case ch1 <- aj:
+            //ch1可写就会进来
+            fmt.Println("写入", aj)
+            aj += ak
+        case <- ch2:
             //可读,代表 已for 6次
             break L
         }
+
     }
-
-
-
-
-
 
     for {
         time.Sleep(1 * time.Second)
     }
+
     fmt.Println("=============\n")
 
 
 
 
-}
 
-
-
-
-func Dofm2(pr interface{}){
-    pe := reflect.TypeOf(pr).Elem()
-    for i := 0; i < pe.NumField(); i++ {
-        fmt.Println(pe.Field(i).Tag.Get("info"))
-        fmt.Println(pe.Field(i).Tag.Get("doc"))
-    }
-}
-
-
-
-
-
-func Dofm(pr interface{}){
-    tf := reflect.TypeOf(pr)
-    tv := reflect.ValueOf(pr)
-    fmt.Println(tf.Name())
-    fmt.Println(tv)
-    for i := 0; i < tf.NumField(); i++ {
-       fmt.Println(tf.Field(i).Name)
-       fmt.Println(tf.Field(i).Type)
-       fmt.Println(tv.Field(i).Interface())
-    }
-    fmt.Println("======================")
-    for i := 0; i < tf.NumMethod(); i++ {
-       fmt.Println(tf.Method(i).Name)
-       fmt.Println(tf.Method(i).Type)
-    }
-
-}
-
-func Dofm3(pr interface{}){
-    jsonStr, err := json.Marshal(pr)
-    if err != nil {
-        return
-    }
-    fmt.Printf("%s\n", jsonStr)
-
-    test1 := Stru5{}
-    err = json.Unmarshal(jsonStr, &test1)
-    if err != nil {
-        return
-    }
-    fmt.Println(test1)
-
-}
-
-
-func (this *Stru2) f9(){
-    fmt.Println(this.b)
-}
-
-
-func (this *Stru) f8() (int){
-    //这里注意,结构体传参不使用指针
-    this.b = 2
-    return this.b
-}
-
-func f7(stru *Stru){
-    stru.a = "a1"
-}
-
-
-
-func f1(a *int, b string) (int, string) {
-    fmt.Println(a) // 这里的打印的a是一个指针地址(如:0xc00012c018)
-    fmt.Println(b)
-    *a = 777
-    return *a, b
-}
-
-func f2(a int, b string) (r1 int, r2 string) {
-    fmt.Println(a)
-    fmt.Println(b)
-
-    r1 = a + 1
-    r2 = b
-
-    return
-}
-
-func f3() (string){
-    fmt.Println("return")
-    return "1"
-}
-
-func f4(){
-    fmt.Println("defer")
-}
-
-func f5() (string){
-    ///defer最后执行
-    defer f4();
-    return f3();
-}
-
-func f6(arr []int){
-    for key, value := range arr{
-        fmt.Println(";key:", key, "; value:", value)
-    }
-    arr[0] = 999
-}
-
-func f9(val interface{}){
-    fmt.Println("type为", reflect.TypeOf(val))
-    fmt.Println("value为", reflect.ValueOf(val))
 }
