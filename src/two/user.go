@@ -1,0 +1,40 @@
+package main
+
+import (
+    "net"
+)
+
+type User struct{
+    Name string
+    Addr string
+    C chan string
+    conn net.Conn
+}
+
+//创建一个用户的API
+func NewUser(conn net.Conn) *User  {
+    ipStr := conn.RemoteAddr().String()
+    user := &User{
+        Name: ipStr + "名称",
+        Addr: ipStr,
+        C: make(chan string),
+        conn: conn,
+    }
+
+    //启动监听当前user channel消息的goroutine
+    go user.ListenMessage()
+
+    return user
+}
+
+//监听当前User channel的方法, 一旦有消息, 就直接发送给对端客户端
+func (this *User) ListenMessage()  {
+
+    for {
+        msg := <- this.C
+
+        //给客户端写入
+        this.conn.Write([]byte(msg + "\n"))
+    }
+
+}
