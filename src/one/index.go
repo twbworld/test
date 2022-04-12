@@ -188,11 +188,12 @@ func main() {
 
 
     arr5 := arr4[1:3] //截取, 从第2个到第4个
+    arr51 := arr4[:3] //截取, 从第0个到第4个
     arr6 := make([]int, 3)
 
     arr6[1] = 100;
 
-    fmt.Println(arr5, arr6)
+    fmt.Println(arr5, arr6, arr51)
 
 
     fmt.Println("=============\n")
