@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net"
+	"strings"
 	"sync"
 )
 
@@ -96,10 +98,46 @@ func (this *Conf) ListenWrice(user *User){
             continue
         }else if 0 == n {
             this.Msg <- "[下线]" + user.Name
+            delete(this.List, user.Name)
             return
         }
 
-        this.Msg <- "[" + user.Name + "]" + string(by[:n-1]) //提取消息并去除"\n"
+        msg :=  string(by[:n-1]) //提取消息并去除"\n"
+        fmt.Println(msg)
+
+        if "@who" == msg {
+            list := make([]string, 0, len(this.List))
+            for k := range this.List{
+                list = append(list, k)
+            }
+            jsonStr, err := json.Marshal(list)
+            if nil == err {
+                msg = string(jsonStr)
+                user.C <- msg
+                continue
+            }else {
+                fmt.Println(err)
+            }
+        }else if 8 < len(msg) && "@rename=" == msg[:8] {
+
+            // newName := msg[10:]
+            newName := strings.Split(msg, "=")[1]
+
+            this.mapLock.Lock()
+            if _, ok := this.List[newName]; ok {
+                user.C <- "用户名[" + newName + "]已存在"
+                this.mapLock.Unlock()
+                continue
+            }
+            delete(this.List, user.Name)
+            user.Name = newName
+            this.List[newName] = user
+            this.mapLock.Unlock()
+            user.C <- "修改用户名成功:" + newName
+            continue
+        }
+
+        this.Msg <- "[" + user.Name + "]" + msg
     }
 }
 
