@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"runtime"
 	"strings"
 	"sync"
+	"time"
 )
 
 type Conf struct {
@@ -64,7 +66,6 @@ func (this *Conf) Start() {
 	}
 }
 
-
 func (this *Conf) ListenMsg() {
 	for {
 		msg := <-this.Msg
@@ -89,64 +90,84 @@ func (this *User) ListenC() {
 
 }
 
-func (this *Conf) ListenWrice(user *User){
-    for {
-        by := make([]byte, 10240)
-        n, err := user.conn.Read(by)
-        if nil != err && io.EOF != err  {
-            fmt.Println("消息出错")
-            continue
-        }else if 0 == n {
-            this.Msg <- "[下线]" + user.Name
-            delete(this.List, user.Name)
-            return
-        }
+func (this *Conf) ListenWrice(user *User, isLive chan bool) {
+	for {
+		by := make([]byte, 10240)
+		n, err := user.conn.Read(by) //客户端返回的消息
+		if nil != err && io.EOF != err {
+			fmt.Println("消息出错")
+			return
+		} else if 0 == n {
+			this.Msg <- "[下线]" + user.Name
+			delete(this.List, user.Name)
+			return
+		}
 
-        msg :=  string(by[:n-1]) //提取消息并去除"\n"
-        fmt.Println(msg)
+		isLive <- true //在线
 
-        if "@who" == msg {
-            list := make([]string, 0, len(this.List))
-            for k := range this.List{
-                list = append(list, k)
-            }
-            jsonStr, err := json.Marshal(list)
-            if nil == err {
-                msg = string(jsonStr)
-                user.C <- msg
-                continue
-            }else {
-                fmt.Println(err)
-            }
-        }else if 8 < len(msg) && "@rename=" == msg[:8] {
+		msg := string(by[:n-1]) //提取消息并去除"\n"
+		fmt.Println(msg)
+		if "" == msg {
+			continue
+		}
 
-            // newName := msg[10:]
-            newName := strings.Split(msg, "=")[1]
+		if "@" == msg[:1] {
+			if "@who" == msg {
+				list := make([]string, 0, len(this.List))
+				for k := range this.List {
+					list = append(list, k)
+				}
+				jsonStr, err := json.Marshal(list)
+				if nil == err {
+					msg = string(jsonStr)
+					user.C <- msg
+					continue
+				} else {
+					fmt.Println(err)
+				}
+			} else if 8 < len(msg) && "@rename=" == msg[:8] {
 
-            this.mapLock.Lock()
-            if _, ok := this.List[newName]; ok {
-                user.C <- "用户名[" + newName + "]已存在"
-                this.mapLock.Unlock()
-                continue
-            }
-            delete(this.List, user.Name)
-            user.Name = newName
-            this.List[newName] = user
-            this.mapLock.Unlock()
-            user.C <- "修改用户名成功:" + newName
-            continue
-        }
+				// newName := msg[10:]
+				newName := strings.Split(msg, "=")[1]
 
-        this.Msg <- "[" + user.Name + "]" + msg
-    }
+				this.mapLock.Lock()
+				if _, ok := this.List[newName]; ok {
+					user.C <- "用户名[" + newName + "]已存在"
+					this.mapLock.Unlock()
+					continue
+				}
+				delete(this.List, user.Name)
+				user.Name = newName
+				this.List[newName] = user
+				this.mapLock.Unlock()
+				user.C <- "修改用户名成功:" + newName
+				continue
+			} else {
+				wz := strings.Index(msg, "=")
+				fmt.Printf("位置:%d", wz)
+				if wz > 1 {
+					//私聊;格式@张三=你好
+					username := msg[1:wz]
+					msg = msg[wz+1:]
+					fmt.Printf("名称:%s;消息:%s", username, msg)
+					if _, ok := this.List[username]; ok && username != user.Name {
+						this.List[username].C <- "[" + user.Name + "]" + msg
+						continue
+					}
+				}
+
+			}
+		}
+
+		this.Msg <- "[" + user.Name + "]" + msg //广播群发
+	}
 }
 
 func (this *Conf) Handle(com net.Conn) {
 	fmt.Println("连接成功")
 
-
-    //新连接,创建用户
-    ipStr := com.RemoteAddr().String()
+	//新连接,创建用户
+	ipStr := com.RemoteAddr().String()
 	user := &User{
 		Name: "用户" + ipStr,
 		Addr: ipStr,
@@ -157,8 +178,6 @@ func (this *Conf) Handle(com net.Conn) {
 	//启动监听当前user channel消息的goroutine
 	go user.ListenC()
 
-
-
 	//加入到用户列表中
 	this.mapLock.Lock()
 	this.List[user.Name] = user
@@ -167,6 +186,29 @@ func (this *Conf) Handle(com net.Conn) {
 	//加入到广播
 	this.Msg <- "[上线]" + user.Name
 
-    go this.ListenWrice(user)
+	var isLive chan bool
+	isLive = make(chan bool)
+
+	//监听客户端回消息
+	go this.ListenWrice(user, isLive)
+
+	//超时踢出
+	for {
+		//select 会循环检测条件,如果有满足则执行并退出,否则一直循环检测; 所以外侧要使用for
+		select {
+		case <-isLive:
+
+		case <-time.After(time.Second * 60 * 5):
+			user.C <- "您已超时被强踢"
+			time.Sleep(time.Second * 1)
+			close(user.C)
+			user.conn.Close()
+			delete(this.List, user.Name)
+			this.Msg <- user.Name + " 超时被强踢"
+			fmt.Println(user.Name + " 超时被强踢")
+			runtime.Goexit()
+			return
+		}
+	}
 
 }
