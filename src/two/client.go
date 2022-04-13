@@ -10,6 +10,7 @@ type ClientConf struct{
     Ip string
     Port int
     Name string
+    flag int
     conn net.Conn
 }
 
@@ -21,6 +22,42 @@ func (this *ClientConf)NewClient() *ClientConf{
     }
     this.conn = con
     return this
+}
+
+func (c *ClientConf)Run(){
+    for 0 != c.flag{
+        if c.ListenShell() {
+            switch c.flag{
+            case 1:
+                fmt.Println("公聊模式")
+            case 2:
+                fmt.Println("私聊模式")
+            case 3:
+                fmt.Println("更新用户名")
+            case 0:
+                fmt.Println("退出")
+            default:
+                fmt.Println("请重新输入")
+            }
+        }
+    }
+
+}
+
+func (this *ClientConf) ListenShell() bool{
+    fmt.Println("1:公聊模式")
+    fmt.Println("2:私聊模式")
+    fmt.Println("3:更新用户名")
+    fmt.Println("0:退出")
+
+    var param int
+    fmt.Scanln(&param)
+
+    if 0 > param || 3 < param {
+        return false
+    }
+    this.flag = param
+    return true
 }
 
 var (
@@ -41,6 +78,7 @@ func main(){
     conf := &ClientConf{
         Ip: Cip,
         Port: Cport,
+        flag: 99,
     }
 
     res := conf.NewClient()
@@ -51,5 +89,6 @@ func main(){
     }
 
     fmt.Println("连接成功")
-    select{}
+
+    conf.Run()
 }
