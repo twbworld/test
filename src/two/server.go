@@ -144,12 +144,10 @@ func (this *Conf) ListenWrice(user *User, isLive chan bool) {
 				continue
 			} else {
 				wz := strings.Index(msg, "=")
-				fmt.Printf("位置:%d", wz)
 				if wz > 1 {
 					//私聊;格式@张三=你好
 					username := msg[1:wz]
 					msg = msg[wz+1:]
-					fmt.Printf("名称:%s;消息:%s", username, msg)
 					if _, ok := this.List[username]; ok && username != user.Name {
 						this.List[username].C <- "[" + user.Name + "]" + msg
 						continue
