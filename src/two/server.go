@@ -143,6 +143,7 @@ func (this *Conf) ListenWrice(user *User, isLive chan bool) {
 				user.C <- "修改用户名成功:" + newName
 				continue
 			} else {
+                //私聊
 				wz := strings.Index(msg, "=")
 				if wz > 1 {
 					//私聊;格式@张三=你好
@@ -153,11 +154,12 @@ func (this *Conf) ListenWrice(user *User, isLive chan bool) {
 						continue
 					}
 				}
-
+                user.C <- "输入错误, 请重新输入"
 			}
-		}
+		}else {
+            this.Msg <- "[" + user.Name + "]" + msg //广播群发
+        }
 
-		this.Msg <- "[" + user.Name + "]" + msg //广播群发
 	}
 }
 
@@ -196,7 +198,7 @@ func (this *Conf) Handle(com net.Conn) {
 		select {
 		case <-isLive:
 
-		case <-time.After(time.Second * 60 * 5):
+		case <-time.After(time.Second * 60 * 60):
 			user.C <- "您已超时被强踢"
 			time.Sleep(time.Second * 1)
 			close(user.C)

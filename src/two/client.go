@@ -6,6 +6,7 @@ import (
 	"io"
 	"net"
 	"os"
+	"runtime"
 )
 
 type ClientConf struct {
@@ -60,12 +61,15 @@ func (c *ClientConf) ReName() {
 }
 
 func (c *ClientConf) PublicChat() {
-    fmt.Println("已进入公聊模式,输入exit退出")
+    fmt.Println("已进入公聊模式(输入exit退出)")
 
     var res string
     for {
         fmt.Scanln(&res)
-        if "exit" != res && 0 != len(res) {
+        if "exit" == res {
+            return
+        }
+        if 0 != len(res) {
             n, err := c.conn.Write([]byte(res + "\n"))
             if nil != err && err != io.EOF {
                 fmt.Println("连接错误[gdssdfsadf]")
@@ -80,6 +84,63 @@ func (c *ClientConf) PublicChat() {
 
 }
 
+func (c *ClientConf) PrivateChat() {
+    fmt.Println("已进入私聊模式(输入exit退出)")
+
+    for{
+        fmt.Println("请输入聊天对象")
+
+        n, err := c.conn.Write([]byte("@who" + "\n"))
+        if nil != err && err != io.EOF {
+            fmt.Println("连接错误[rwrwerwe]")
+            return
+        }else if 0 == n  {
+            fmt.Println("对方已断开连接[rwerewrwe]")
+            return
+        }
+
+        var he string
+        fmt.Scanln(&he)
+
+        if "" == he {
+            fmt.Println("不能为空,请重新输入")
+            continue
+        }
+        if "exit" == he {
+            return
+        }
+
+        fmt.Println("开始聊天")
+        for {
+            var chat string
+            fmt.Scanln(&chat)
+
+            if "" == chat {
+                fmt.Println("不能为空,请重新输入")
+                continue
+            }
+            if "exit" == chat {
+                break
+            }
+
+            n, err := c.conn.Write([]byte("@" + he + "=" + chat + "\n"))
+            if nil != err && err != io.EOF {
+                fmt.Println("连接错误[rwrwerwe]")
+                return
+            }else if 0 == n  {
+                fmt.Println("对方已断开连接[rwerewrwe]")
+                return
+            }
+        }
+    }
+}
+
+func (c *ClientConf) ExitOut() {
+    fmt.Println("成功退出")
+    runtime.Goexit()
+    c.conn.Close()
+}
+
 func (c *ClientConf) Run() {
 	for 9 != c.flag {
 		if c.ListenShell() {
@@ -87,13 +148,13 @@ func (c *ClientConf) Run() {
 			case 1:
 				c.PublicChat()
 			case 2:
-				fmt.Println("私聊模式")
+				c.PrivateChat()
 			case 3:
 				c.ReName()
 			case 9:
-				fmt.Println("退出")
+				c.ExitOut()
 			default:
-				fmt.Println("请重新输入")
+				fmt.Println("\n" + "请重新输入")
 			}
 		}
 	}
