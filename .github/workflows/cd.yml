@@ -18,7 +18,6 @@ on:
       - 'README.md'
 
 jobs:
-
   cd:
     runs-on: ubuntu-20.04
     env:
