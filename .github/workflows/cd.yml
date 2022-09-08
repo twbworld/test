@@ -26,7 +26,6 @@ jobs:
     steps:
       - uses: Yikun/hub-mirror-action@master
         with:
-          folder: .
           src: root@wx.wtjzy.com:/mnt/www/git_bare/test.git
           dst: root@wx.wtjzy.com:/mnt/www/git_bare/test.git
           dst_key: ${{ secrets.KEY }}
