@@ -24,8 +24,11 @@ jobs:
     env:
       TZ: Asia/Shanghai
     steps:
-      - uses: Yikun/hub-mirror-action@master
+
+      - uses: wearerequired/git-mirror-action@v1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          # SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
         with:
-          src: root@wx.wtjzy.com:/mnt/www/git_bare/test.git
-          dst: root@wx.wtjzy.com:/mnt/www/git_bare/test.git
-          dst_key: ${{ secrets.KEY }}
+          source-repo: "git@github.com:twbworld/test.git"
+          destination-repo: "root@wx.wtjzy.com:/mnt/www/git_bare/test.git"
