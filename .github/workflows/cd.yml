@@ -24,11 +24,6 @@ jobs:
     env:
       TZ: Asia/Shanghai
     steps:
-      - uses: actions/checkout@v3 #官方Action, pull当前git项目
-        with:
-          persist-credentials: false #不保存证书(当前Action的参数)
-          submodules: recursive #true OR recursive
-          fetch-depth: 0
       - uses: Yikun/hub-mirror-action@master
         with:
           folder: .
