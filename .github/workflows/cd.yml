@@ -1,0 +1,37 @@
+name: cd
+
+on:
+  workflow_dispatch: #github页面手动触发
+  push: #push即触发
+    branches:
+      - main
+    paths-ignore: #不作为触发的文件
+      - '.*'
+      - 'LICENSE'
+      - 'README.md'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '.*'
+      - 'LICENSE'
+      - 'README.md'
+
+jobs:
+
+  cd:
+    runs-on: ubuntu-20.04
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - uses: actions/checkout@v3 #官方Action, pull当前git项目
+        with:
+          persist-credentials: false #不保存证书(当前Action的参数)
+          submodules: recursive #true OR recursive
+          fetch-depth: 0
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: .
+          branch: main
+          ssh-key: ${{ secrets.KEY }}
+          repository-name: root@wx.wtjzy.com:/mnt/www/git_bare/test.git
