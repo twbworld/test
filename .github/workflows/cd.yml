@@ -30,5 +30,5 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.KEY }}
           # SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
         with:
-          source-repo: "git@github.com:${{ $GITHUB_REPOSITORY }}.git"
+          source-repo: "git@github.com:${{ github.repository }}.git"
           destination-repo: "root@wx.wtjzy.com:/mnt/www/git_bare/test.git"
