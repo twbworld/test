@@ -29,9 +29,9 @@ jobs:
           persist-credentials: false #不保存证书(当前Action的参数)
           submodules: recursive #true OR recursive
           fetch-depth: 0
-      - uses: JamesIves/github-pages-deploy-action@v4
+      - uses: Yikun/hub-mirror-action@master
         with:
           folder: .
-          branch: main
-          ssh-key: ${{ secrets.KEY }}
-          repository-name: root@wx.wtjzy.com:/mnt/www/git_bare/test.git
+          src: root@wx.wtjzy.com:/mnt/www/git_bare/test.git
+          dst: root@wx.wtjzy.com:/mnt/www/git_bare/test.git
+          dst_key: ${{ secrets.KEY }}
