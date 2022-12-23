@@ -43,6 +43,7 @@ func main() {
 }
 
 func (this *Conf) Start() {
+    fmt.Printf("%s:%d", this.Ip, this.Port)
 	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", this.Ip, this.Port))
 
 	if err != nil {
