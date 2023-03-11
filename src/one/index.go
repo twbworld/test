@@ -66,8 +66,8 @@ func main(){
 
 
     fmt.Println("============================\n");
-    arr := [3]int {3,7}
-    arr2 := []string {"m", "3"}
+    arr := [3]int {3,7} //数组
+    arr2 := []string {"m", "3"} //切片
     arr3 := Aa{9, "sb"}
     arr4 := Aa{a:1, b:"sb"}
 
@@ -91,11 +91,12 @@ func main(){
 
 
 
-    fmt.Println("============================\n");
+    fmt.Println("============================aaaa\n");
+    fmt.Println(arr5)
     arr6 := arr5[2:6]
     arr7 := arr5[:3]
     arr5[1] = 100
-    fmt.Println(arr7, arr6, arr5)
+    fmt.Println(arr7, arr6, arr5) //切片是&引用类型,引用了数组
 
 
 
@@ -103,6 +104,7 @@ func main(){
 
     fmt.Println("============================\n");
 
+    //:=是引用,copy是另复制一份
     fmt.Println(arr7, arr6)
     copy(arr7, arr6)
     fmt.Println(arr7, arr6)
@@ -240,7 +242,20 @@ L:
         }
     }
 
+    fmt.Println("============================\n");
 
+    arr21 := make([]int, 2)
+    arr21[0] = 1
+
+    arr22 := arr21
+
+    arr23 := make([]int, 3)
+
+    copy(arr23, arr21)
+
+    arr21[0] = 2
+
+    fmt.Println(arr22, arr23)
 
 
 
