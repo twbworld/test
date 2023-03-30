@@ -1,3 +1,4 @@
+// 视频教学https://www.bilibili.com/video/BV1gf4y1r79E/
 package main
 
 import (
@@ -42,9 +43,9 @@ func main() {
 	server.Start()
 }
 
-func (this *Conf) Start() {
-    fmt.Printf("%s:%d", this.Ip, this.Port)
-	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", this.Ip, this.Port))
+func (c *Conf) Start() {
+	fmt.Printf("%s:%d", c.Ip, c.Port)
+	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", c.Ip, c.Port))
 
 	if err != nil {
 		fmt.Println("连接失败")
@@ -53,7 +54,7 @@ func (this *Conf) Start() {
 
 	defer lis.Close()
 
-	go this.ListenMsg()
+	go c.ListenMsg()
 
 	for {
 		com, err := lis.Accept() //会在此柱塞
@@ -63,44 +64,44 @@ func (this *Conf) Start() {
 			continue
 		}
 
-		go this.Handle(com)
+		go c.Handle(com)
 	}
 }
 
-func (this *Conf) ListenMsg() {
+func (c *Conf) ListenMsg() {
 	for {
-		msg := <-this.Msg
+		msg := <-c.Msg
 
-		this.mapLock.Lock()
-		for _, user := range this.List {
+		c.mapLock.Lock()
+		for _, user := range c.List {
 			user.C <- msg //广播
 		}
-		this.mapLock.Unlock()
+		c.mapLock.Unlock()
 	}
 }
 
-//监听当前User channel的方法, 一旦有消息, 就直接发送给对端客户端
-func (this *User) ListenC() {
+// 监听当前User channel的方法, 一旦有消息, 就直接发送给对端客户端
+func (u *User) ListenC() {
 
 	for {
-		msg := <-this.C
+		msg := <-u.C
 
 		//给客户端写入
-		this.conn.Write([]byte(msg + "\n"))
+		u.conn.Write([]byte(msg + "\n"))
 	}
 
 }
 
-func (this *Conf) ListenWrice(user *User, isLive chan bool) {
+func (c *Conf) ListenWrice(user *User, isLive chan bool) {
 	for {
 		by := make([]byte, 10240)
 		n, err := user.conn.Read(by) //客户端返回的消息
 		if nil != err && io.EOF != err {
 			fmt.Println("消息出错")
 			return
-		} else if 0 == n {
-			this.Msg <- "[下线]" + user.Name
-			delete(this.List, user.Name)
+		} else if n == 0 {
+			c.Msg <- "[下线]" + user.Name
+			delete(c.List, user.Name)
 			return
 		}
 
@@ -108,14 +109,14 @@ func (this *Conf) ListenWrice(user *User, isLive chan bool) {
 
 		msg := string(by[:n-1]) //提取消息并去除"\n"
 		fmt.Println(msg)
-		if "" == msg {
+		if msg == "" {
 			continue
 		}
 
-		if "@" == msg[:1] {
-			if "@who" == msg {
-				list := make([]string, 0, len(this.List))
-				for k := range this.List {
+		if msg[:1] == "@" {
+			if msg == "@who" {
+				list := make([]string, 0, len(c.List))
+				for k := range c.List {
 					list = append(list, k)
 				}
 				jsonStr, err := json.Marshal(list)
@@ -126,45 +127,45 @@ func (this *Conf) ListenWrice(user *User, isLive chan bool) {
 				} else {
 					fmt.Println(err)
 				}
-			} else if 8 < len(msg) && "@rename=" == msg[:8] {
+			} else if 8 < len(msg) && msg[:8] == "@rename=" {
 
 				// newName := msg[10:]
 				newName := strings.Split(msg, "=")[1]
 
-				this.mapLock.Lock()
-				if _, ok := this.List[newName]; ok {
+				c.mapLock.Lock()
+				if _, ok := c.List[newName]; ok {
 					user.C <- "用户名[" + newName + "]已存在"
-					this.mapLock.Unlock()
+					c.mapLock.Unlock()
 					continue
 				}
-				delete(this.List, user.Name)
+				delete(c.List, user.Name)
 				user.Name = newName
-				this.List[newName] = user
-				this.mapLock.Unlock()
+				c.List[newName] = user
+				c.mapLock.Unlock()
 				user.C <- "修改用户名成功:" + newName
 				continue
 			} else {
-                //私聊
+				//私聊
 				wz := strings.Index(msg, "=")
 				if wz > 1 {
 					//私聊;格式@张三=你好
 					username := msg[1:wz]
 					msg = msg[wz+1:]
-					if _, ok := this.List[username]; ok && username != user.Name {
-						this.List[username].C <- "[" + user.Name + "]" + msg
+					if _, ok := c.List[username]; ok && username != user.Name {
+						c.List[username].C <- "[" + user.Name + "]" + msg
 						continue
 					}
 				}
-                user.C <- "输入错误, 请重新输入"
+				user.C <- "输入错误, 请重新输入"
 			}
-		}else {
-            this.Msg <- "[" + user.Name + "]" + msg //广播群发
-        }
+		} else {
+			c.Msg <- "[" + user.Name + "]" + msg //广播群发
+		}
 
 	}
 }
 
-func (this *Conf) Handle(com net.Conn) {
+func (c *Conf) Handle(com net.Conn) {
 	fmt.Println("连接成功")
 
 	//新连接,创建用户
@@ -180,18 +181,17 @@ func (this *Conf) Handle(com net.Conn) {
 	go user.ListenC()
 
 	//加入到用户列表中
-	this.mapLock.Lock()
-	this.List[user.Name] = user
-	this.mapLock.Unlock()
+	c.mapLock.Lock()
+	c.List[user.Name] = user
+	c.mapLock.Unlock()
 
 	//加入到广播
-	this.Msg <- "[上线]" + user.Name
+	c.Msg <- "[上线]" + user.Name
 
-	var isLive chan bool
-	isLive = make(chan bool)
+	var isLive chan bool = make(chan bool)
 
 	//监听客户端回消息
-	go this.ListenWrice(user, isLive)
+	go c.ListenWrice(user, isLive)
 
 	//超时踢出
 	for {
@@ -204,10 +204,10 @@ func (this *Conf) Handle(com net.Conn) {
 			time.Sleep(time.Second * 1)
 			close(user.C)
 			user.conn.Close()
-			delete(this.List, user.Name)
-			this.Msg <- user.Name + " 超时被强踢"
+			delete(c.List, user.Name)
+			c.Msg <- user.Name + " 超时被强踢"
 			fmt.Println(user.Name + " 超时被强踢")
-			runtime.Goexit()
+			runtime.Goexit() //关闭当前协程
 			return
 		}
 	}

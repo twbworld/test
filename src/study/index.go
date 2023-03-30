@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 func main() {
@@ -204,7 +205,82 @@ L:
 	fun1 := f9()
     fmt.Println(fun1(), fun1()) //1,2
 
+
+	fmt.Println("============================\n")
+
+	var ia int = 9
+
+    var f float64
+    f = float64(ia)
+    fmt.Printf("%T, %v\n", f, f)
+
+	f = 10.8
+    ad := int(f)
+    fmt.Printf("%T, %v\n", ad, ad)
+
+	fmt.Println("============================\n")
+
+	var test97 = Student{
+        Name: "bbb",
+        Age: 11,
+    }
+	fmt.Println(&test97) //"aaa"; 调用自定义的String()
+    fmt.Println(test97) //{qcrao 18}; 不会调用自定义的String(), 因为其是指针类型
+
+	fmt.Println("============================\n")
+
+	var test96 *Student = new(Student) //创建指针类型的test96, 然后用new分配内存(类似make), new返回一个内存的指针
+	fmt.Println(test96)
+
+	fmt.Println("============================\n")
+
+	var test99 interface{} = new(Student) //new()返回指针
+    s:= test99.(*Student) //断言是否为"Student指针"类型
+	fmt.Println(s)
+
+	fmt.Println("============================\n")
+
+	var test98 interface{}
+
+	fmt.Println(test98 == nil) //true
+
+	fmt.Println("============================\n")
+
+	//byte可以直接修改值
+	test95 := []byte("abc")
+    test95[0] = 'A' //单引号!!!
+	//string不能修改值
+	test94 := "abc"
+    test94 = test94[0:3]
+	fmt.Println(string(test95), test94)
+	fmt.Println(string(test95) == test94)
+	// fmt.Println(test95 == []byte(test94)) //这里会报错,[]byte不能直接比较
+
+	fmt.Println("============================\n")
+
+	test92 := `s
+	ss\ns` //反引号可以换行且不会转义;双引号相反
+
+	fmt.Println(test92)
+
+	fmt.Println("============================\n")
+
+	test93 := []string{"a", "b"}
+	fmt.Println(strings.Join(test93, ",")) //"a,b"
+
+
+
 }
+
+type Student struct {
+	Name string
+	Age int
+}
+
+func (*Student) String() string{
+	return "aaa"
+}
+
 
 func f9() func() int {
     //闭包

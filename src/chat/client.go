@@ -189,7 +189,7 @@ func init() {
 	flag.StringVar(&Cip, "i", "127.0.0.1", "连接服务器的ip,默认是127.0.0.1")
 }
 
-func main() {
+func index() {
 	flag.Parse()
 
 	conf := &ClientConf{
