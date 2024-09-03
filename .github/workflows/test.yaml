@@ -10,7 +10,7 @@ jobs:
     env:
       TZ: Asia/Shanghai
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # - name: save-data
       #   run: sudo mysql -uroot -h 127.0.0.1 < dao/db.sql
