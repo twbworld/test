@@ -81,7 +81,7 @@ func (m *mysql) connect() {
 	}
 
 	dao.CanLock = true
-	global.Log.Infof("%s版本: %s; 地址: %s", global.Config.Database.Type, m.version(), dsn)
+	global.Log.Infof("%s版本: %s; 地址: @tcp(%s:%s)/%s", global.Config.Database.Type, m.version(), global.Config.Database.MysqlHost, global.Config.Database.MysqlPort, global.Config.Database.MysqlDbname)
 }
 
 func (s *sqlite) createTable() {
