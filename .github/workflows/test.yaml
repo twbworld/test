@@ -1,0 +1,30 @@
+name: test
+on:
+  workflow_dispatch: #github页面手动触发
+  workflow_call: #允许其他workflow调用
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - uses: actions/checkout@v3
+
+      # - name: save-data
+      #   run: sudo mysql -uroot -h 127.0.0.1 < dao/db.sql
+
+      - name: add-envFile
+        run: sudo cp config.example.yaml config.yaml
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Test
+        run: go test -v ./...
+
+      - name: Build
+        run: go build -v ./...
