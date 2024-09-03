@@ -46,7 +46,7 @@ jobs:
   push-images:
     needs: [test, metadata]
     if: needs.metadata.outputs.image-tags
-    uses: ./.github/workflows/push-images.yaml
+    uses: twbworld/proxy/.github/workflows/push-images.yaml@main
     secrets: inherit #传递所有secrets, 被调用的不需要接收
     with:
       image-tags: ${{ needs.metadata.outputs.image-tags }}
