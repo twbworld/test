@@ -23,11 +23,6 @@ import (
 
 var server *http.Server
 
-func init() {
-	initGlobal.New().Start()
-	initializeLogger()
-	initializeGinServer()
-}
 
 func initializeLogger() {
 	ginfile, err := os.OpenFile(global.Config.GinLogPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
@@ -56,6 +51,9 @@ func initializeGinServer() {
 }
 
 func Start() {
+	initGlobal.New().Start()
+	initializeLogger()
+
 	defer func() {
 		if p := recover(); p != nil {
 			global.Log.Println(p)
@@ -67,6 +65,7 @@ func Start() {
 		}
 	}()
 
+	initializeGinServer()
 	s := system.Start()
 	defer s.Stop()
 	// service.Service.UserServiceGroup.DatingService.Match(4)
