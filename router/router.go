@@ -14,7 +14,7 @@ func Start(ginServer *gin.Engine) {
 	// 限制form内存(默认32MiB)
 	ginServer.MaxMultipartMemory = 32 << 20
 
-	ginServer.Use(middleware.CorsHandle()) //全局中间件
+	ginServer.Use(middleware.CorsHandle(), middleware.OptionsMethod) //全局中间件
 
 	ginServer.StaticFile("/favicon.ico", "static/favicon.ico")
 	ginServer.StaticFile("/robots.txt", "static/robots.txt")
@@ -43,7 +43,7 @@ func Start(ginServer *gin.Engine) {
 	ginServer.POST("login", controller.Api.UserApiGroup.BaseApi.Login)
 	ginServer.POST("userAdd", controller.Api.UserApiGroup.UserApi.UserAdd)
 
-	auth := ginServer.Use(middleware.JWTAuth)
+	auth := ginServer.Group("").Use(middleware.JWTAuth)
 	{
 		auth.POST("getDatingAmount", controller.Api.UserApiGroup.DatingApi.GetDatingAmount)
 		auth.POST("getDating", controller.Api.UserApiGroup.DatingApi.GetDating)

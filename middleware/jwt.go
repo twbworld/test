@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -33,7 +34,13 @@ func (w reWriter) Write(b []byte) (int, error) {
 
 // jwt授权验证
 func JWTAuth(ctx *gin.Context) {
-	token, err := jwt.ParseWithClaims(ctx.GetHeader(`Authorization`), &common.JwtInfo{}, func(token *jwt.Token) (interface{}, error) {
+	authCode := ctx.GetHeader(`Authorization`)
+	if authCode == "" {
+		common.FailAuth(ctx, `非法请求`)
+		return
+	}
+
+	token, err := jwt.ParseWithClaims(strings.TrimSpace(authCode), &common.JwtInfo{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(global.Config.JwtKey), nil
 	})
 

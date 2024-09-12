@@ -20,6 +20,7 @@ func New(configFile ...string) *GlobalInit {
 		//从命令参数获取配置路径
 		//避免 单元测试(go test)自动加参数, 导致flag报错
 		flag.StringVar(&config, "c", "", "choose config file.")
+		flag.Parse()
 	}
 	if config == "" && len(configFile) > 0 {
 		config = configFile[0]
@@ -33,7 +34,7 @@ func New(configFile ...string) *GlobalInit {
 	v.SetConfigFile(config)
 	v.SetConfigType("yaml")
 	if err := v.ReadInConfig(); err != nil {
-		panic("读取配置失败[u9ij]: " + err.Error())
+		panic("读取配置失败[u9ij]: " + config + err.Error())
 	}
 
 	// 监听配置文件

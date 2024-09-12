@@ -1,5 +1,5 @@
 ##编译
-FROM --platform=$TARGETPLATFORM golang:1.23 AS builder
+FROM golang:1.23 AS builder
 WORKDIR /app
 ARG TARGETARCH
 ENV GO111MODULE=on
@@ -13,7 +13,7 @@ RUN CGO_ENABLED=1 GOOS=linux GOARCH=$TARGETARCH go build -ldflags "-s -w --extld
 
 
 ##打包镜像
-FROM --platform=$TARGETPLATFORM alpine:latest
+FROM alpine:latest
 LABEL org.opencontainers.image.vendor="忐忑"
 LABEL org.opencontainers.image.authors="1174865138@qq.com"
 LABEL org.opencontainers.image.description="小程序我们何时约"
