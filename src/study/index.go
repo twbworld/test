@@ -8,6 +8,37 @@ import (
 )
 
 func main() {
+	/*
+	推荐init函数
+	推荐[...]int{}
+	推荐a, b = b, a
+	推荐for range 3 {}
+	推荐 func()(err error){}
+	推荐使用[]byte
+	推荐make预设长度和容量
+	推荐strings.Builder拼接字符串
+	推荐消除边界检测 a = a[:3]
+	推荐大slice切割并copy到新slice,大slice会被垃圾回收省资源,如:
+		mydata := data[m:n]
+		r := make([]int, len(mydata))
+		copy(r, mydata)
+	推荐json序列化可使用"-"或"omitempty"
+	推荐多协程使用errgroup替代go func(){}
+	协程panic导致主进程挂掉, 且只能自己捕获
+	善用defer,如defer a()()
+	注意少用fmt和defer
+	chan要close
+	注意map需判断存在性
+	map是无序的, for时注意
+	注意for i++{go func(){i}}
+	使用锁: sync.RWMutex
+	全局变量避免业务修改
+	struct/[] 或 对slice/map/interface/fun/chan进行增加操作, 才使用指针传递
+	注意判断sql.ErrNoRows
+	注意属性配置空间, 避免json.Marshal结果出现null
+	工厂模式
+	泛形
+	*/
 
 	fmt.Println("===========开始\n")
 
@@ -18,14 +49,16 @@ func main() {
 
 	var c int = 4
 
+	var z = int(4)
+
 	var (
 		h int = 1
 	)
 
 	fmt.Printf("类型: %T; 值: %v\n", a, a)
-	fmt.Println(b, c, h)
+	fmt.Println(b, c, z, h)
 
-	fmt.Println("========================\n")
+	fmt.Println("1========================\n")
 
 	const (
 		i = iota
@@ -35,7 +68,7 @@ func main() {
 
 	fmt.Println(i, j, k)
 
-	fmt.Println("============================\n")
+	fmt.Println("2============================\n")
 
 	l := 1
 	m := "a"
@@ -71,7 +104,7 @@ func main() {
 	arr5[1] = 100
 	fmt.Println(arr7, arr6, arr5) //切片是&引用类型,引用了数组
 
-	fmt.Println("============================\n")
+	fmt.Println("============================sssssss\n")
 
 	//:=是引用,copy是另复制一份
 	fmt.Println(arr7, arr6)
@@ -80,18 +113,18 @@ func main() {
 	copy(arr6, arr7)
 	fmt.Println(arr7, arr6)
 
-	fmt.Println("============================\n")
+	fmt.Println("============================fffffffffffff\n")
 
-	var arr8 map[string][]int
-	arr8 = make(map[string][]int, 2)
+	var arr8 map[string][]int = make(map[string][]int, 2)
 	arr8[`中`] = []int{1, 2}
 	arr8["美"] = []int{2, 3}
 	arr8["英"] = []int{2, 3}
-	fmt.Println(arr8)
+	fmt.Println(arr8, len(arr8))
 
-	delete(arr8, `英语`)
+	delete(arr8, `英`)
 
 	fmt.Printf("%+v\n", arr8)
+	fmt.Println(arr8, len(arr8))
 
 	fmt.Println("============================\n")
 
@@ -101,18 +134,15 @@ func main() {
 
 	fmt.Println("============================\n")
 
-	var arr10 Ac
-	arr10 = Aa{a: 19, b: `技术`}
+	var arr10 Ac = Aa{a: 19, b: `技术`}
 	fmt.Println(arr10.f6())
 
 	fmt.Println("============================\n")
 
-	var arr11 BookR
-	arr11 = Book{}
+	var arr11 BookR = Book{}
 	arr11.R()
 
-	var arr12 BookW
-	arr12 = arr11.(BookW)
+	var arr12 BookW = arr11.(BookW)
 	arr12.W()
 
 	fmt.Println("============================\n")
@@ -178,6 +208,8 @@ L:
 
 	fmt.Println("============================\n")
 
+	//!!!!!!!重点易错
+
 	arr21 := make([]int, 2)
 	arr21[0] = 1
 
@@ -224,12 +256,14 @@ L:
         Name: "bbb",
         Age: 11,
     }
-	fmt.Println(&test97) //"aaa"; 调用自定义的String()
-    fmt.Println(test97) //{qcrao 18}; 不会调用自定义的String(), 因为其是指针类型
+	fmt.Println((&test97).Name) //"bbb"
+	fmt.Println(&test97) //"aaa"; 调用自定义的(*Student)String()
+    fmt.Println(test97) //{bbb 11}; 因为其是值类型, 不会调用(*Student)String()
+	// String()函数作用于fmt.Println等函数, 等同于"%v"
 
 	fmt.Println("============================\n")
 
-	var test96 *Student = new(Student) //创建指针类型的test96, 然后用new分配内存(类似make), new返回一个内存的指针
+	var test96 *Student = new(Student) //new分配内存(类似make), 并返回该内存的指针
 	fmt.Println(test96)
 
 	fmt.Println("============================\n")
@@ -240,21 +274,13 @@ L:
 
 	fmt.Println("============================\n")
 
-	var test98 interface{}
-
-	fmt.Println(test98 == nil) //true
-
-	fmt.Println("============================\n")
-
 	//byte可以直接修改值
 	test95 := []byte("abc")
     test95[0] = 'A' //单引号!!!
 	//string不能修改值
-	test94 := "abc"
+	test94 := "Abc"
     test94 = test94[0:3]
 	fmt.Println(string(test95), test94)
-	fmt.Println(string(test95) == test94)
-	// fmt.Println(test95 == []byte(test94)) //这里会报错,[]byte不能直接比较
 
 	fmt.Println("============================\n")
 
@@ -268,7 +294,24 @@ L:
 	test93 := []string{"a", "b"}
 	fmt.Println(strings.Join(test93, ",")) //"a,b"
 
+	fmt.Println("============================\n")
 
+	//一个nil的channel永远是阻塞的
+	// <-(chan int)(nil)
+
+	fmt.Println("============================\n")
+
+	//接口值为 nil,但接口本身不为 nil;
+
+	var x interface{}
+	fmt.Println(x == nil) //true
+
+	var y *int = nil
+	x = y
+
+	fmt.Println(x == nil) //false
+	fmt.Println(x) //nil
+	fmt.Println(reflect.ValueOf(x).IsNil()) //正确的判断方法
 
 }
 
@@ -287,13 +330,13 @@ func f9() func() int {
 
     i := 0
 
-    fun := func () int  {
+    return func () int  {
         i++
         return i
     }
-    return fun
 }
 
+//泛型
 type Tarr[T int | string] []T
 type Tarr2[K string, V int | string] map[K]V
 
@@ -325,10 +368,10 @@ type BookW interface {
 	W()
 }
 
-func (this Book) R() {
+func (b Book) R() {
 	fmt.Println(`调用了R()`)
 }
-func (this Book) W() {
+func (b Book) W() {
 	fmt.Println(`调用了W()`)
 }
 
@@ -336,11 +379,11 @@ type Ac interface {
 	f6() string
 }
 
-func (this Aa) f6() string {
+func (b Aa) f6() string {
 	return `f6()返回`
 }
 
-func (this *Aa) f5(param interface{}) {
+func (a *Aa) f5(param interface{}) {
 	if _, ok := param.(string); ok {
 		fmt.Println(`传递了string参数`)
 	} else {
@@ -363,6 +406,8 @@ func f4(arr [3]int, arr2 []string, arr3 Aa, arr4 *Aa) {
 		fmt.Println(v)
 	}
 
+	//反射
+
 	arrType := reflect.TypeOf(arr3)
 	arrV := reflect.ValueOf(arr3)
 	arrN := arrType.NumField()
@@ -371,10 +416,10 @@ func f4(arr [3]int, arr2 []string, arr3 Aa, arr4 *Aa) {
 		fmt.Println(arrType.Field(i).Name, ":", arrV.Field(i), "`", arrType.Field(i).Tag, "`")
 	}
 
-	arr4T := reflect.TypeOf(arr4).Elem()
+	arr4T := reflect.TypeOf(arr4).Elem() //指针
 
 	for i := 0; i < arr4T.NumField(); i++ {
-		fmt.Println(arr4T.Field(i).Name)
+		fmt.Println(arr4T.Field(i).Name, arr4T.Field(i).Tag.Get("info"))
 	}
 
 	fmt.Printf("%+v\n%#v\n", arr4, arr4)

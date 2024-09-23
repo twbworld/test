@@ -195,7 +195,7 @@ func (c *Conf) Handle(com net.Conn) {
 
 	//超时踢出
 	for {
-		//select 会循环检测条件,如果有满足则执行并退出,否则一直循环检测; 所以外侧要使用for
+		//select 会循环随机检测条件,如果有满足则执行并退出,否则一直循环检测; 所以外侧要使用for
 		select {
 		case <-isLive:
 
